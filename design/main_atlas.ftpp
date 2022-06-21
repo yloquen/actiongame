@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "version": "0.6.7"
+  },
+  "savePath": "D:\\projects\\CardGameEngine\\static\\assets",
+  "images": [],
+  "folders": [
+    "D:/projects/CardGameEngine/design/interface"
+  ],
+  "packOptions": {
+    "textureName": "main_atlas",
+    "textureFormat": "png",
+    "removeFileExtension": true,
+    "prependFolderName": false,
+    "base64Export": false,
+    "tinify": false,
+    "tinifyKey": "",
+    "scale": 1,
+    "disableSmoothing": false,
+    "filter": "none",
+    "exporter": "pixi.js",
+    "fileName": "pack-result",
+    "savePath": "D:\\projects\\CardGameEngine\\static\\assets",
+    "width": 2048,
+    "height": 2048,
+    "fixedSize": false,
+    "powerOfTwo": false,
+    "padding": 2,
+    "extrude": 2,
+    "allowRotation": true,
+    "allowTrim": true,
+    "trimMode": "trim",
+    "alphaThreshold": "0",
+    "detectIdentical": true,
+    "packer": "MaxRectsBin",
+    "packerMethod": "ContactPointRule"
+  }
+}

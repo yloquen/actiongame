@@ -1,0 +1,12 @@
+{
+  "rules": {
+//    "no-any": true,
+    "curly": true,
+    "quotemark": [true, "double"],
+    "typedef": [
+      true,
+      "call-signature",
+      "property-declaration"
+    ]
+  }
+}

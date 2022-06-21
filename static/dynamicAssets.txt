@@ -1,0 +1,14 @@
+{
+    "sounds":
+    [
+        "btn",
+        "card",
+        "card_burn",
+        "game_over",
+        "heal",
+        "health_loss",
+        "sanity_loss",
+        "shuffle",
+        "victory"
+    ]
+}
