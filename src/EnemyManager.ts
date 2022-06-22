@@ -5,6 +5,7 @@ import AnimSpriteComp from "./entity/AnimSpriteComp";
 import E_SpriteState from "./const/E_SpriteState";
 import Point from "./geom/Point";
 import E_UpdateStep from "./const/E_UpdateStep";
+import BaseEnemy from "./entity/BaseEnemy";
 
 export default class EnemyManager
 {
@@ -13,14 +14,18 @@ export default class EnemyManager
 
     constructor()
     {
-        this.spawnInterval = 5000;
+        this.spawnInterval = 200;
         this.spawnTimer = this.spawnInterval;
     }
 
 
     init():void
     {
-        app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.FINAL);
+         app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.FINAL);
+        // for (let i = 0; i < 100; i++)
+        // {
+        //     this.createEnemy();
+        // }
     }
 
 
@@ -37,7 +42,8 @@ export default class EnemyManager
 
     private createEnemy():void
     {
-        const pos = new Point(Math.random()*1000, Math.random()*1000);
+        const pos = new Point(Math.random()*2000, Math.random()*1000);
+        // const pos = new Point(1000,500);
 
         const e = new Entity(
             {
@@ -49,7 +55,10 @@ export default class EnemyManager
                             collider:
                             {
                                 type: E_ColliderType.CIRCLE,
-                                radius:30
+                                radius:20,
+                                receiveCollisions:true,
+                                collisionRatioOut:1,
+                                collisionRatioIn:1
                             }
                         },
                         {
@@ -59,6 +68,10 @@ export default class EnemyManager
                                 { stateName:E_SpriteState.IDLE, numFrames:4, updateTime:100, texturePrefix:"fly_anim_f", frame:0 },
                                 { stateName:E_SpriteState.WALK, numFrames:4, updateTime:100, texturePrefix:"fly_anim_f", frame:0 }
                             ]
+                        },
+                        {
+                            compType:BaseEnemy,
+                            health:5
                         }
                     ]
             }

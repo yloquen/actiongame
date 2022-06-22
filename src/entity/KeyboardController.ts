@@ -29,6 +29,7 @@ export default class KeyboardController extends BaseComp
 
         document.addEventListener("keydown", this.handleKey.bind(this));
         document.addEventListener("keyup", this.handleKey.bind(this));
+        // document.addEventListener("")
     }
 
 
@@ -101,7 +102,6 @@ export default class KeyboardController extends BaseComp
             this.axes[axisIndex] = 0;
         }
 
-        let velocityMag = 0.3;
         if (axisIndex === 0)
         {
             this.dirVectors.x = this.axes[axisIndex];
@@ -115,6 +115,7 @@ export default class KeyboardController extends BaseComp
         this.velocity.y = this.dirVectors.y;
 
         this.velocity.normalize();
+        let velocityMag = 0.3;
         this.velocity.scale(velocityMag);
 
         this.physics.setVelocity(this.velocity);

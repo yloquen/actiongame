@@ -29,6 +29,7 @@ export default class AnimSprite
         spriteAnimData.forEach((d:SpriteAnimData) =>
         {
             d.updateTime = d.updateTime ? d.updateTime : 100;
+            d.frame = Math.floor(Math.random() * d.numFrames);
             map[d.stateName] = d;
         });
         this.spriteMap = map;

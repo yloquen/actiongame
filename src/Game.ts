@@ -6,31 +6,26 @@ import Point from "./geom/Point";
 import AnimSpriteComp from "./entity/AnimSpriteComp";
 import E_SpriteState from "./const/E_SpriteState";
 import E_UpdateStep from "./const/E_UpdateStep";
+import GamepadController from "./entity/GamepadController";
+import Util from "./util/Util";
+import WeaponsComp from "./entity/WeaponsComp";
 
 export default class Game
 {
-    static GRID_SIZE = new Point(10,10);
-    static GRID_TILE_SIZE = new Point(100,100);
 
     private updateCallbacks:Function[][];
 
     constructor()
     {
-        const physicsGrid:[][][] = [];
+        this.updateCallbacks = [];
 
-        for (let x = 0; x < Game.GRID_SIZE.x; x++)
+        for (let step in E_UpdateStep)
         {
-            physicsGrid[x] = [];
-            for (let y = 0; y < Game.GRID_SIZE.y; y++)
+            if (!isNaN(Number(step)))
             {
-                physicsGrid[x][y] = [];
+                this.updateCallbacks[step] = [];
             }
         }
-
-        this.updateCallbacks = [];
-        this.updateCallbacks[E_UpdateStep.MOVEMENT] = [];
-        this.updateCallbacks[E_UpdateStep.COLLISION_HANDLING] = [];
-        this.updateCallbacks[E_UpdateStep.FINAL] = [];
     }
 
 
@@ -47,7 +42,9 @@ export default class Game
                             collider:
                             {
                                 type: E_ColliderType.CIRCLE,
-                                radius:30
+                                radius:25,
+                                collisionRatioOut:1,
+                                collisionRatioIn:0
                             }
                         },
                         {
@@ -60,21 +57,19 @@ export default class Game
                         },
                         {
                             compType:KeyboardController
+                        },
+                        {
+                            compType:GamepadController
+                        },
+                        {
+                            compType:WeaponsComp
                         }
                     ]
             }
         );
 
 
-        this.addEntity(e);
-
         app.pixi.ticker.add(this.update.bind(this));
-    }
-
-
-    addEntity(e:Entity):void
-    {
-
     }
 
 
@@ -87,10 +82,11 @@ export default class Game
     update():void
     {
         const delta = app.pixi.ticker.deltaMS;
-
+        this.updateCallbacks[E_UpdateStep.INPUT].forEach(c => { c(delta); });
         this.updateCallbacks[E_UpdateStep.MOVEMENT].forEach(c => { c(delta); });
         app.physics.checkCollisions();
         this.updateCallbacks[E_UpdateStep.COLLISION_HANDLING].forEach(c => { c(delta); });
+        this.updateCallbacks[E_UpdateStep.CREATION].forEach(c => { c(delta); });
         this.updateCallbacks[E_UpdateStep.FINAL].forEach(c => { c(delta); });
     }
 

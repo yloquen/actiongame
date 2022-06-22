@@ -18,12 +18,12 @@ export default class PhysicsComp extends BaseComp
     public velocity:Point;
 
     private mass:number;
-    private collider:Collider;
+    collider:Collider;
 
 
     init():void
     {
-        this.velocity = new Point(0,0);
+        this.velocity = this.data.velocity ? this.data.velocity.clone() : new Point(0,0);
         this.mass = 10;
         this.position = new Point(this.data.pos.x, this.data.pos.y);
 

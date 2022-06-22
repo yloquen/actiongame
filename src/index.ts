@@ -4,9 +4,8 @@ import Assets from "./Assets";
 import ViewManager from "./ViewManager";
 import EnemyManager from "./EnemyManager";
 import PhysicsEngine from "./PhysicsEngine";
-
-
-
+import SoundController from "./SoundController";
+import C_Game from "./const/C_Game";
 
 
 export const app:any =
@@ -20,16 +19,15 @@ export const app:any =
     game:new Game(),
     viewManager:new ViewManager(),
     enemyManager:new EnemyManager(),
-    physics:new PhysicsEngine()
+    physics:new PhysicsEngine(),
+    sound:new SoundController()
 };
 
 
 document.body.appendChild(app.pixi.view);
 
-let assetVer = "?v=1";
-
 app.pixi.loader
-    .add("main_atlas", "assets/main_atlas.json" + assetVer)
+    .add("main_atlas", "assets/main_atlas.json?v=" + C_Game.ASSET_VER)
     .load(start);
 
 
@@ -41,4 +39,7 @@ function start():void
     app.game.init();
     app.viewManager.init();
     app.enemyManager.init();
+    app.sound.init();
 }
+
+

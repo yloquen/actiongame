@@ -3,7 +3,7 @@ import {app} from "../index";
 
 export default class
 {
-    protected entity:Entity;
+    entity:Entity;
     protected data:any;
 
 

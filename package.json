@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "echo %npm_package_version%",
-    "dev": "parcel ./src/index.html --port=8080 --open",
+    "dev": "parcel ./src/index.html --port=8080 --open --log-level verbose",
     "ver": "echo %npm_package_version% > ./dist/assets/ver.txt",
     "build": "parcel build ./src/index.html --public-url ./ --no-source-maps && npm run ver && npm run archive",
     "archive": "WinRAR a -r ./dist/dist%npm_package_version%.zip ./dist/*.*"

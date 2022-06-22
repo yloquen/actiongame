@@ -96,10 +96,58 @@
         "y": 0.5
       }
     },
-    "knight_idle_anim_f0": {
+    "fireball_f0": {
       "frame": {
         "x": 4,
         "y": 54,
+        "w": 7,
+        "h": 7
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 7,
+        "h": 7
+      },
+      "sourceSize": {
+        "w": 7,
+        "h": 7
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "fireball_f1": {
+      "frame": {
+        "x": 22,
+        "y": 37,
+        "w": 7,
+        "h": 7
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 7,
+        "h": 7
+      },
+      "sourceSize": {
+        "w": 7,
+        "h": 7
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "knight_idle_anim_f0": {
+      "frame": {
+        "x": 42,
+        "y": 4,
         "w": 13,
         "h": 16
       },
@@ -122,8 +170,8 @@
     },
     "knight_idle_anim_f2": {
       "frame": {
-        "x": 42,
-        "y": 4,
+        "x": 4,
+        "y": 69,
         "w": 13,
         "h": 15
       },
@@ -146,8 +194,8 @@
     },
     "knight_idle_anim_f4": {
       "frame": {
-        "x": 4,
-        "y": 78,
+        "x": 63,
+        "y": 4,
         "w": 13,
         "h": 16
       },
@@ -170,8 +218,8 @@
     },
     "knight_run_anim_f0": {
       "frame": {
-        "x": 63,
-        "y": 4,
+        "x": 37,
+        "y": 28,
         "w": 13,
         "h": 15
       },
@@ -194,8 +242,8 @@
     },
     "knight_run_anim_f1": {
       "frame": {
-        "x": 24,
-        "y": 27,
+        "x": 4,
+        "y": 92,
         "w": 13,
         "h": 16
       },
@@ -218,8 +266,8 @@
     },
     "knight_run_anim_f2": {
       "frame": {
-        "x": 4,
-        "y": 102,
+        "x": 25,
+        "y": 52,
         "w": 13,
         "h": 15
       },
@@ -266,8 +314,8 @@
     },
     "knight_run_anim_f4": {
       "frame": {
-        "x": 25,
-        "y": 51,
+        "x": 58,
+        "y": 28,
         "w": 13,
         "h": 16
       },
@@ -291,7 +339,7 @@
     "knight_run_anim_f5": {
       "frame": {
         "x": 4,
-        "y": 125,
+        "y": 116,
         "w": 13,
         "h": 15
       },
@@ -314,8 +362,8 @@
     },
     "knight_idle_anim_f1": {
       "frame": {
-        "x": 4,
-        "y": 54,
+        "x": 42,
+        "y": 4,
         "w": 13,
         "h": 16
       },
@@ -338,8 +386,8 @@
     },
     "knight_idle_anim_f3": {
       "frame": {
-        "x": 42,
-        "y": 4,
+        "x": 4,
+        "y": 69,
         "w": 13,
         "h": 15
       },
@@ -362,8 +410,8 @@
     },
     "knight_idle_anim_f5": {
       "frame": {
-        "x": 4,
-        "y": 78,
+        "x": 63,
+        "y": 4,
         "w": 13,
         "h": 16
       },
@@ -392,7 +440,7 @@
     "format": "RGBA8888",
     "size": {
       "w": 101,
-      "h": 144
+      "h": 135
     },
     "scale": 1
   }

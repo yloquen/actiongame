@@ -12,7 +12,7 @@ export default class Point
 
     normalize():void
     {
-        if (this.x > 0 && this.y > 0)
+        if (Math.abs(this.x) > 0 && Math.abs(this.y) > 0)
         {
             const scaleFactor = 1 / this.length();
             this.x *= scaleFactor;
@@ -34,5 +34,38 @@ export default class Point
     length():number
     {
         return Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+
+    clone():Point
+    {
+        return new Point(this.x, this.y);
+    }
+
+    add(p:Point):void
+    {
+        this.x += p.x;
+        this.y += p.y;
+    }
+
+    sub(p:Point):void
+    {
+        this.x -= p.x;
+        this.y -= p.y;
+    }
+
+    toPolar():void
+    {
+        const x = this.x;
+        const y = this.y;
+        this.x = this.length();
+        this.y = Math.atan2(y,x);
+    }
+
+    toRect():void
+    {
+        const x = this.x;
+        const y = this.y;
+        this.x = x * Math.cos(y);
+        this.y = x * Math.sin(y);
     }
 }
