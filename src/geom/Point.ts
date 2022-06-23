@@ -68,4 +68,10 @@ export default class Point
         this.x = x * Math.cos(y);
         this.y = x * Math.sin(y);
     }
+
+    copyFrom(p:Point):void
+    {
+        this.x = p.x;
+        this.y = p.y;
+    }
 }

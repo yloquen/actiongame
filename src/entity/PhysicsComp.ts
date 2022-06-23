@@ -21,6 +21,7 @@ export default class PhysicsComp extends BaseComp
     collider:Collider;
 
 
+
     init():void
     {
         this.velocity = this.data.velocity ? this.data.velocity.clone() : new Point(0,0);
@@ -34,7 +35,9 @@ export default class PhysicsComp extends BaseComp
             app.physics.addCollider(this.collider);
         }
 
-        app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.MOVEMENT);
+        this.addUpdateCallback(this.update.bind(this), E_UpdateStep.MOVEMENT);
+
+
     }
 
 

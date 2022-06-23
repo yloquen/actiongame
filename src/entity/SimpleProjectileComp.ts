@@ -3,6 +3,9 @@ import E_UpdateStep from "../const/E_UpdateStep";
 import {app} from "../index";
 import PhysicsComp from "./PhysicsComp";
 import BaseEnemy from "./BaseEnemy";
+import AnimSpriteComp from "./AnimSpriteComp";
+import { TweenMax } from "gsap";
+import Point from "../geom/Point";
 
 export default class SimpleProjectileComp extends BaseComp
 {
@@ -10,6 +13,8 @@ export default class SimpleProjectileComp extends BaseComp
     private physics:PhysicsComp;
     private minDamage:number;
     private deltaDamage:number;
+    private lifetime:number = 0;
+
 
 
 
@@ -20,12 +25,18 @@ export default class SimpleProjectileComp extends BaseComp
         this.minDamage = this.data.minDamage;
         this.deltaDamage = this.data.deltaDamage;
 
-        app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.COLLISION_HANDLING);
+        this.updateCallback = app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.COLLISION_HANDLING);
     }
 
 
     update(delta:number):void
     {
+        this.lifetime += delta;
+        if (this.lifetime > 3000)
+        {
+            this.numHits = 0;
+        }
+
         const collisions = this.physics.collider.collisions;
         while (collisions.length > 0 && this.numHits > 0)
         {
@@ -39,7 +50,20 @@ export default class SimpleProjectileComp extends BaseComp
                 enemyComp.applyDamage(damage);
             }
         }
+
+        if (this.numHits === 0)
+        {
+            app.game.removeUpdateCallback(this.updateCallback);
+            const animComp = this.entity.getComponent(AnimSpriteComp)!;
+            this.physics.velocity.scale(.1);
+            TweenMax.to(animComp.anim.sprite, .2, {alpha:0, onComplete:() =>
+                {
+                    this.destroyEntity()
+                }})
+        }
     }
+
+
 
 
 

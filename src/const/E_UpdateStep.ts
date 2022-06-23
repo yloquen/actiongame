@@ -1,5 +1,6 @@
 enum E_UpdateStep
 {
+    PRE_MOVEMENT,
     CREATION,
     INPUT,
     MOVEMENT,

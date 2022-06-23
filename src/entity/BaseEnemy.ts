@@ -34,10 +34,4 @@ export default class BaseEnemy extends BaseComp
     }
 
 
-    destroy():void
-    {
-
-    }
-
-
 }

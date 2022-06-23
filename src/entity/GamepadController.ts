@@ -30,7 +30,7 @@ export default class GamepadController extends BaseComp
         window.addEventListener("gamepadconnected", (e:any) =>
         {
             this.gamepad = e.gamepad;
-            app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.INPUT);
+            this.addUpdateCallback(this.update.bind(this), E_UpdateStep.INPUT);
         });
 
     }

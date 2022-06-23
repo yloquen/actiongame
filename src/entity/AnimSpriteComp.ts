@@ -8,14 +8,17 @@ import { TweenMax } from "gsap";
 
 export default class AnimSpriteComp extends BaseComp
 {
-    private anim:AnimSprite;
+    public anim:AnimSprite;
+
     private physics:PhysicsComp;
 
     init():void
     {
         this.physics = this.entity.getComponent(PhysicsComp)!;
         this.anim = new AnimSprite(this.data.animData);
-        app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.FINAL);
+        this.anim.sprite.x = this.physics.position.x;
+        this.anim.sprite.y = this.physics.position.y;
+        this.addUpdateCallback(this.update.bind(this), E_UpdateStep.MOVEMENT);
     }
 
     update():void
@@ -45,7 +48,10 @@ export default class AnimSpriteComp extends BaseComp
 
     playDeathAnimation():void
     {
-        TweenMax.to(this.anim.sprite, .2, {alpha:0});
+        TweenMax.to(this.anim.sprite, .2, {alpha:0, onComplete:() =>
+            {
+                this.destroyEntity();
+            }});
     }
 
 
@@ -54,4 +60,12 @@ export default class AnimSpriteComp extends BaseComp
         this.anim.sprite.tint = 0xff0000;
         TweenMax.delayedCall(.2, () => {this.anim.sprite.tint = 0xffffff});
     }
+
+
+    destroy():void
+    {
+        this.anim.destroy();
+        super.destroy();
+    }
+
 }

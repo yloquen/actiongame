@@ -3,6 +3,7 @@ import E_SpriteState from "./const/E_SpriteState";
 import {app} from "./index";
 import {E_ViewLayer} from "./ViewManager";
 import E_UpdateStep from "./const/E_UpdateStep";
+import {UpdateData} from "./Game";
 
 
 type SpriteAnimData =
@@ -21,6 +22,7 @@ export default class AnimSprite
     private spriteMap:Record<E_SpriteState, SpriteAnimData>;
     private state:E_SpriteState;
     private updateTime:number = 0;
+    private updateData:UpdateData;
 
 
     constructor(spriteAnimData:SpriteAnimData[], initialState:E_SpriteState = E_SpriteState.IDLE)
@@ -35,12 +37,13 @@ export default class AnimSprite
         this.spriteMap = map;
         this.state = initialState;
         this.sprite = new PIXI.Sprite(PIXI.Texture.EMPTY);
+        this.setTexture();
         this.sprite.anchor.set(.5);
         this.sprite.scale.set(5);
 
         app.viewManager.addChild(E_ViewLayer.CHARACTERS, this.sprite);
 
-        app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.FINAL);
+        this.updateData = app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.FINAL);
     }
 
 
@@ -53,8 +56,15 @@ export default class AnimSprite
         {
             this.updateTime %= animData.updateTime;
             animData.frame = ++animData.frame % animData.numFrames;
-            this.sprite.texture = app.assets.getTexture(animData.texturePrefix + animData.frame);
+            this.setTexture();
         }
+    }
+
+
+    setTexture():void
+    {
+        const animData = this.spriteMap[this.state];
+        this.sprite.texture = app.assets.getTexture(animData.texturePrefix + animData.frame);
     }
 
 
@@ -73,5 +83,11 @@ export default class AnimSprite
     getState():E_SpriteState
     {
         return this.state;
+    }
+
+
+    destroy():void
+    {
+        app.game.removeUpdateCallback(this.updateData);
     }
 }

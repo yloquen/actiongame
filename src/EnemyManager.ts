@@ -6,6 +6,7 @@ import E_SpriteState from "./const/E_SpriteState";
 import Point from "./geom/Point";
 import E_UpdateStep from "./const/E_UpdateStep";
 import BaseEnemy from "./entity/BaseEnemy";
+import EnemyMover from "./entity/EnemyMover";
 
 export default class EnemyManager
 {
@@ -14,14 +15,14 @@ export default class EnemyManager
 
     constructor()
     {
-        this.spawnInterval = 200;
+        this.spawnInterval = 700;
         this.spawnTimer = this.spawnInterval;
     }
 
 
     init():void
     {
-         app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.FINAL);
+        // app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.FINAL);
         // for (let i = 0; i < 100; i++)
         // {
         //     this.createEnemy();
@@ -65,13 +66,28 @@ export default class EnemyManager
                             compType:AnimSpriteComp,
                             animData:
                             [
-                                { stateName:E_SpriteState.IDLE, numFrames:4, updateTime:100, texturePrefix:"fly_anim_f", frame:0 },
-                                { stateName:E_SpriteState.WALK, numFrames:4, updateTime:100, texturePrefix:"fly_anim_f", frame:0 }
+                                {
+                                    stateName:E_SpriteState.IDLE,
+                                    numFrames:4,
+                                    updateTime:100,
+                                    texturePrefix:"fly_anim_f",
+                                    frame:0
+                                },
+                                {
+                                    stateName:E_SpriteState.WALK,
+                                    numFrames:4,
+                                    updateTime:100,
+                                    texturePrefix:"fly_anim_f",
+                                    frame:0
+                                }
                             ]
                         },
                         {
                             compType:BaseEnemy,
                             health:5
+                        },
+                        {
+                            compType:EnemyMover
                         }
                     ]
             }
