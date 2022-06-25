@@ -3,7 +3,7 @@ import {app} from "./index";
 
 export default class
 {
-    private resources:PIXI.IResourceDictionary;
+    public resources:PIXI.IResourceDictionary;
 
 
     init():void

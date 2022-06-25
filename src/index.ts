@@ -6,6 +6,10 @@ import EnemyManager from "./EnemyManager";
 import PhysicsEngine from "./PhysicsEngine";
 import SoundController from "./SoundController";
 import C_Game from "./const/C_Game";
+import GamepadController from "./entity/GamepadController";
+import MapGenerator from "./MapGenerator";
+
+
 
 
 export const app:any =
@@ -20,7 +24,9 @@ export const app:any =
     viewManager:new ViewManager(),
     enemyManager:new EnemyManager(),
     physics:new PhysicsEngine(),
-    sound:new SoundController()
+    sound:new SoundController(),
+    gamepadController:new GamepadController(),
+    mapGenerator:new MapGenerator()
 };
 
 
@@ -28,6 +34,8 @@ document.body.appendChild(app.pixi.view);
 
 app.pixi.loader
     .add("main_atlas", "assets/main_atlas.json?v=" + C_Game.ASSET_VER)
+    .add("tilemap", "assets/maps/map1.tmj?v=" + C_Game.ASSET_VER)
+    .add("tileset", "assets/maps/tiles.tsj?v=" + C_Game.ASSET_VER)
     .load(start);
 
 
@@ -36,10 +44,14 @@ function start():void
     PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
     app.assets.init();
+    app.gamepadController.init();
     app.game.init();
     app.viewManager.init();
     app.enemyManager.init();
     app.sound.init();
+    app.mapGenerator.init();
+
+
 }
 
 

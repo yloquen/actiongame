@@ -4,7 +4,7 @@ import E_SpriteState from "../const/E_SpriteState";
 import BaseComp from "./BaseComp";
 import PhysicsComp from "./PhysicsComp";
 import E_UpdateStep from "../const/E_UpdateStep";
-import { TweenMax } from "gsap";
+import { gsap } from "gsap";
 
 export default class AnimSpriteComp extends BaseComp
 {
@@ -58,7 +58,7 @@ export default class AnimSpriteComp extends BaseComp
     playDamageAnim():void
     {
         this.anim.sprite.tint = 0xff0000;
-        TweenMax.delayedCall(.2, () => {this.anim.sprite.tint = 0xffffff});
+        gsap.delayedCall(.2, () => {this.anim.sprite.tint = 0xffffff});
     }
 
 

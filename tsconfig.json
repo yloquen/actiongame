@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "alwaysStrict": true,
+    "sourceMap": true,
     "strictPropertyInitialization": false,
     "strictNullChecks": true,
     "noImplicitAny" : true,

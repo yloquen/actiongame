@@ -10,7 +10,7 @@ import E_SpriteState from "../const/E_SpriteState";
 import SimpleProjectileComp from "./SimpleProjectileComp";
 import {Cubic, TweenMax} from "gsap";
 import {E_ViewLayer} from "../ViewManager";
-import BLEND_MODES = PIXI.BLEND_MODES;
+import WaveBeam from "../misc/WaveBeam";
 
 
 export default class WeaponsComp extends BaseComp
@@ -18,10 +18,11 @@ export default class WeaponsComp extends BaseComp
     private cooldown:number;
     private aimVector:Point;
     private physics:PhysicsComp;
-    private time:number;
-    private waveBeamSprite:PIXI.Sprite;
-    private waveBeam:PIXI.Sprite;
-    private waveBeamRenderTexture:PIXI.RenderTexture;
+    private chargeTime:number;
+    private maxChargeTime:number = 1000;
+
+    private waveBeam:WaveBeam;
+    private waveBeamState:boolean;
 
 
     init():void
@@ -30,59 +31,43 @@ export default class WeaponsComp extends BaseComp
         this.cooldown = 0;
         this.addUpdateCallback(this.update.bind(this), E_UpdateStep.CREATION);
 
-        this.waveBeamRenderTexture = new PIXI.RenderTexture(new PIXI.BaseRenderTexture({width:810, height:400}));
-        this.waveBeam = new PIXI.Sprite(this.waveBeamRenderTexture);
+        this.waveBeam = new WaveBeam();
+        app.viewManager.addChild(E_ViewLayer.CHARACTERS, this.waveBeam.sprite);
+        this.waveBeam.sprite.visible = false;
 
-        this.waveBeamSprite = app.assets.getSprite("beam");
-        this.waveBeamSprite.blendMode = BLEND_MODES.ADD;
-        this.waveBeam.anchor.set(.01, .5);
-
-        app.viewManager.addChild(E_ViewLayer.CHARACTERS, this.waveBeam);
-
-        this.time = 0;
+        this.chargeTime = 0;
     }
 
 
     update(delta:number):void
     {
-        this.time += delta;
+        const aimVecLen = this.aimVector.length();
 
-        let x = 0;
-        const timeCoef = Math.min(1, this.time/3000);
+        this.chargeTime += delta;
+        const p = Math.min(1, this.chargeTime/this.maxChargeTime);
+        this.waveBeam.render(p);
 
-        this.waveBeam.alpha = .2 + timeCoef * .4;
-
-        const numPoints = 80;
-        const amplitudeCoef = 1.5;
-        const maxAmplitude = (numPoints-1) * amplitudeCoef;
-        const spriteHalfHeight = this.waveBeamSprite.height * .5;
-        for (let sIdx = 0; sIdx < numPoints; sIdx++)
-        {
-            this.waveBeamSprite.scale.set(1.5 + 1.5 * timeCoef);
-            this.waveBeamSprite.x = x;
-            const theta = x * .033;
-            const amplitude = sIdx * amplitudeCoef * timeCoef;
-            this.waveBeamSprite.y = 200 + Math.sin(theta) * amplitude - spriteHalfHeight;
-
-            const step = (1.5 - Math.abs(Math.cos(theta))) * 10 + (maxAmplitude-amplitude) * .02;
-            x += step;
-
-            app.pixi.renderer.render(this.waveBeamSprite, this.waveBeamRenderTexture, sIdx === 0);
-        }
-
-        this.waveBeam.x = this.physics.position.x;
-        this.waveBeam.y = this.physics.position.y;
+        this.waveBeam.sprite.x = this.physics.position.x;
+        this.waveBeam.sprite.y = this.physics.position.y;
 
         this.cooldown -= delta;
 
-        if (this.cooldown <= 0 && this.aimVector.length() > 0)
+        if (aimVecLen > 0)
         {
-            this.cooldown = 100;
-            this.shoot();
-
-            const targetAngle = Math.atan2(this.aimVector.y, this.aimVector.x);
-
-            TweenMax.to(this.waveBeam, .15, {ease:Cubic.easeIn, rotation:targetAngle});
+            if (this.waveBeamState)
+            {
+                debugger;
+                const targetAngle = Math.atan2(this.aimVector.y, this.aimVector.x) + Math.PI * 10;
+                TweenMax.to(this.waveBeam.sprite, .15, {ease:Cubic.easeIn, rotation:targetAngle});
+            }
+            else
+            {
+                if (this.cooldown <= 0)
+                {
+                    this.cooldown = 100;
+                    this.shoot();
+                }
+            }
         }
     }
 
@@ -143,5 +128,12 @@ export default class WeaponsComp extends BaseComp
         this.physics.position.y -= this.aimVector.y * 2.5;
 
         app.sound.playSound("shoot", .4);
+    }
+
+
+    setWaveBeamState(state:boolean):void
+    {
+        this.waveBeam.sprite.visible = state;
+        this.waveBeamState = state;
     }
 }

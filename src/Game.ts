@@ -9,6 +9,7 @@ import E_UpdateStep from "./const/E_UpdateStep";
 import GamepadController from "./entity/GamepadController";
 import Util from "./util/Util";
 import WeaponsComp from "./entity/WeaponsComp";
+import CharControlComp from "./entity/CharControlComp";
 
 export type UpdateData =
 {
@@ -65,10 +66,7 @@ export default class Game
                             ]
                         },
                         {
-                            compType:KeyboardController
-                        },
-                        {
-                            compType:GamepadController
+                            compType:CharControlComp
                         },
                         {
                             compType:WeaponsComp
@@ -101,6 +99,7 @@ export default class Game
     {
         const delta = app.pixi.ticker.deltaMS;
         this.updateCallbacks[E_UpdateStep.INPUT].forEach(c => { c(delta); });
+        this.updateCallbacks[E_UpdateStep.POST_INPUT].forEach(c => { c(delta); });
         this.updateCallbacks[E_UpdateStep.PRE_MOVEMENT].forEach(c => { c(delta); });
         this.updateCallbacks[E_UpdateStep.MOVEMENT].forEach(c => { c(delta); });
         app.physics.checkCollisions();
