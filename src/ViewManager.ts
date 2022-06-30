@@ -1,26 +1,43 @@
 import * as PIXI from "pixi.js";
 import {app} from "./index";
+import E_UpdateStep from "./const/E_UpdateStep";
 
 export enum E_ViewLayer
 {
-    CHARACTERS
+    TERRAIN_UNDER_1,
+    TERRAIN_UNDER_2,
+    CHARACTERS,
+    TERRAIN_OVER_1,
+    TERRAIN_OVER_2
 }
 
 export default class
 {
     private layers:PIXI.Sprite[];
+    private mainContainer:PIXI.Sprite;
 
 
     constructor()
     {
         this.layers = [];
-        this.layers[E_ViewLayer.CHARACTERS] = new PIXI.Sprite();
+        this.mainContainer = new PIXI.Sprite();
+
+        for (let layer in E_ViewLayer)
+        {
+            if (!isNaN(Number(layer)))
+            {
+                const s = new PIXI.Sprite();
+                this.mainContainer.addChild(s);
+                this.layers[layer] = s;
+            }
+        }
     }
 
 
     init():void
     {
-        this.layers.forEach(l => app.pixi.stage.addChild(l));
+        app.pixi.stage.addChild(this.mainContainer);
+        this.layers.forEach(l => this.mainContainer.addChild(l));
     }
 
 

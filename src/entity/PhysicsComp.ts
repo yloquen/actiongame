@@ -3,11 +3,12 @@ import BaseComp from "./BaseComp";
 import Entity from "./Entity";
 import {app} from "../index";
 import Point from "../geom/Point";
-import Collider from "../physics/Collider";
+import BaseCollider from "../physics/BaseCollider";
 import E_UpdateStep from "../const/E_UpdateStep";
 
 export enum E_ColliderType
 {
+    RECTANGLE,
     CIRCLE
 }
 
@@ -18,7 +19,7 @@ export default class PhysicsComp extends BaseComp
     public velocity:Point;
 
     private mass:number;
-    collider:Collider;
+    collider:BaseCollider;
 
 
 
@@ -31,13 +32,10 @@ export default class PhysicsComp extends BaseComp
         const colliderData = this.data.collider;
         if (colliderData)
         {
-            this.collider = new Collider(colliderData, this);
+            this.collider = new colliderData.type(colliderData, this);
             app.physics.addCollider(this.collider);
         }
-
         this.addUpdateCallback(this.update.bind(this), E_UpdateStep.MOVEMENT);
-
-
     }
 
 
@@ -51,6 +49,13 @@ export default class PhysicsComp extends BaseComp
     setVelocity(v:Point):void
     {
         this.velocity = v;
+    }
+
+
+    destroy():void
+    {
+        app.physics.removeCollider(this.collider);
+        super.destroy();
     }
 
 

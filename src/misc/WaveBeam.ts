@@ -17,7 +17,7 @@ export default class WaveBeam
         this.sprite = new PIXI.Sprite(this.renderTexture);
 
         this.sourceSprite = app.assets.getSprite("beam");
-        this.sourceSprite.scale.set(3);
+        this.sourceSprite.scale.set(app.model.scale * .5);
         this.sourceSprite.blendMode = BLEND_MODES.ADD;
         this.sprite.anchor.set(.01, .5);
     }
@@ -32,7 +32,7 @@ export default class WaveBeam
         while(x < 660)
         {
             n++;
-            this.sourceSprite.scale.set(1.5 + x*3/660);
+            this.sourceSprite.scale.set(app.model.scale * .3 * (1 + (2 * x) / 660));
             this.sourceSprite.x = x - jitter + Math.random() * jitter * 2;
             const amplitude = x * .2 * progress;
             this.sourceSprite.y = 200 + Math.sin(x * .03) * amplitude - spriteHalfHeight - jitter + Math.random() * jitter * 2;

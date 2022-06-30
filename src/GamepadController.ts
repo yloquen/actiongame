@@ -1,9 +1,9 @@
-import BaseComp from "./BaseComp";
-import PhysicsComp from "./PhysicsComp";
-import Point from "../geom/Point";
-import {app} from "../index";
-import E_UpdateStep from "../const/E_UpdateStep";
-import WeaponsComp from "./WeaponsComp";
+import BaseComp from "./entity/BaseComp";
+import PhysicsComp from "./entity/PhysicsComp";
+import Point from "./geom/Point";
+import {app} from "./index";
+import E_UpdateStep from "./const/E_UpdateStep";
+import WeaponsComp from "./entity/WeaponsComp";
 
 
 export default class GamepadController
@@ -12,14 +12,8 @@ export default class GamepadController
     public buttonChanges:number[];
     public velocity:Point;
 
-    // private physics:PhysicsComp;
-
-    private gamepad:Gamepad|undefined;
-
     private deadZone:number = .2;
     private aimVector:Point;
-    // private weapons:WeaponsComp;
-
 
 
 
@@ -31,50 +25,34 @@ export default class GamepadController
         this.buttonsState = [];
         this.buttonChanges = [];
 
-/*        window.addEventListener("gamepadconnected", (e:any) =>
-        {
-            this.gamepad = e.gamepad;
-            app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.INPUT);
-
-            this.gamepad.buttons.forEach((b, index) =>
-            {
-                this.buttonsState[index] = b.pressed;
-            });
-        });*/
-
-
         app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.INPUT);
     }
 
 
     update(delta:number):void
     {
-        this.gamepad = undefined;
         //@ts-ignore
         const gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
         for (let gpIdx = 0; gpIdx < gamepads.length; gpIdx++)
         {
-            this.gamepad = gamepads[gpIdx];
-            if (this.gamepad)
+            const gamepad = gamepads[gpIdx];
+            if (gamepad)
             {
+                this.processInput(gamepad);
                 break;
             }
         }
+    }
 
-        if (!this.gamepad)
-        {
-            return;
-        }
-
-        console.log(this.buttonsState);
-
-        this.velocity.x = this.gamepad.axes[0];
-        this.velocity.y = this.gamepad.axes[1];
+    processInput(gamepad:Gamepad):void
+    {
+        this.velocity.x = gamepad.axes[0];
+        this.velocity.y = gamepad.axes[1];
         this.processVector(this.velocity);
         this.velocity.scale(.3);
 
-        this.aimVector.x = this.gamepad.axes[2];
-        this.aimVector.y = this.gamepad.axes[3];
+        this.aimVector.x = gamepad.axes[2];
+        this.aimVector.y = gamepad.axes[3];
         this.processVector(this.aimVector);
         this.aimVector.scale(1);
         if (this.aimVector.length() > 0)
@@ -83,17 +61,16 @@ export default class GamepadController
         }
 
         this.buttonChanges.length = 0;
-        this.gamepad.buttons.forEach((b,index) =>
+        gamepad.buttons.forEach((b,index) =>
         {
             if (b.pressed !== this.buttonsState[index])
             {
-                debugger;
                 this.buttonChanges.push(index);
                 this.buttonsState[index] = b.pressed;
             }
         });
 
-        this.gamepad.buttons.forEach((b, index) =>
+        gamepad.buttons.forEach((b, index) =>
         {
             this.buttonsState[index] = b.pressed;
         });

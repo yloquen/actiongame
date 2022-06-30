@@ -22,7 +22,7 @@ export default class Point
 
     toString():string
     {
-        return "x: " + this.x + " y:" + this.y;
+        return "x:" + this.x.toFixed(2) + " y:" + this.y.toFixed(2);
     }
 
     scale(scale:number):void
@@ -74,4 +74,11 @@ export default class Point
         this.x = p.x;
         this.y = p.y;
     }
+
+    set(x:number, y:number)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
 }

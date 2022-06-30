@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js"
-import BaseComp from "./BaseComp";
-import PhysicsComp from "./PhysicsComp";
-import Point from "../geom/Point";
+import BaseComp from "./entity/BaseComp";
+import PhysicsComp from "./entity/PhysicsComp";
+import Point from "./geom/Point";
 
 export default class KeyboardController extends BaseComp
 {

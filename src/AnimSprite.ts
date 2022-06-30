@@ -39,7 +39,7 @@ export default class AnimSprite
         this.sprite = new PIXI.Sprite(PIXI.Texture.EMPTY);
         this.setTexture();
         this.sprite.anchor.set(.5);
-        this.sprite.scale.set(5);
+        this.sprite.scale.set(app.model.scale);
 
         app.viewManager.addChild(E_ViewLayer.CHARACTERS, this.sprite);
 
@@ -88,6 +88,7 @@ export default class AnimSprite
 
     destroy():void
     {
+        this.sprite.parent.removeChild(this.sprite);
         app.game.removeUpdateCallback(this.updateData);
     }
 }

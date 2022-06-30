@@ -48,7 +48,6 @@ export default class
         for (let updateIdx = 0; updateIdx < this.updateCallbacks.length; updateIdx++)
         {
             app.game.removeUpdateCallback(this.updateCallbacks[updateIdx]);
-
         }
     }
 

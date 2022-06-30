@@ -11,6 +11,7 @@ import SimpleProjectileComp from "./SimpleProjectileComp";
 import {Cubic, TweenMax} from "gsap";
 import {E_ViewLayer} from "../ViewManager";
 import WaveBeam from "../misc/WaveBeam";
+import CircleCollider from "../physics/CircleCollider";
 
 
 export default class WeaponsComp extends BaseComp
@@ -56,7 +57,6 @@ export default class WeaponsComp extends BaseComp
         {
             if (this.waveBeamState)
             {
-                debugger;
                 const targetAngle = Math.atan2(this.aimVector.y, this.aimVector.x) + Math.PI * 10;
                 TweenMax.to(this.waveBeam.sprite, .15, {ease:Cubic.easeIn, rotation:targetAngle});
             }
@@ -90,10 +90,10 @@ export default class WeaponsComp extends BaseComp
                     velocity:this.aimVector,
                     collider:
                     {
-                        type: E_ColliderType.CIRCLE,
-                        radius:15,
+                        type:CircleCollider,
+                        radius:app.model.scale*3,
                         collisionRatioOut:.25,
-                        collisionRatioIn:0
+                        collisionRatioIn:1
                     }
                 },
                 {

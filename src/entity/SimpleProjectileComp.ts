@@ -2,10 +2,10 @@ import BaseComp from "./BaseComp";
 import E_UpdateStep from "../const/E_UpdateStep";
 import {app} from "../index";
 import PhysicsComp from "./PhysicsComp";
-import BaseEnemy from "./BaseEnemy";
+import BaseEnemyComp from "./BaseEnemyComp";
 import AnimSpriteComp from "./AnimSpriteComp";
-import { TweenMax } from "gsap";
-import Point from "../geom/Point";
+import {TweenMax} from "gsap";
+import {E_EFlag} from "./Entity";
 
 export default class SimpleProjectileComp extends BaseComp
 {
@@ -42,12 +42,16 @@ export default class SimpleProjectileComp extends BaseComp
         {
             const collision = collisions.pop()!;
             const e = collision.physics.entity;
-            const enemyComp = e.getComponent(BaseEnemy);
+            const enemyComp = e.getComponent(BaseEnemyComp);
             if (enemyComp)
             {
                 this.numHits--;
                 const damage = this.minDamage + Math.floor(Math.random() * this.deltaDamage);
                 enemyComp.applyDamage(damage);
+            }
+            else if (e.hasFlag(E_EFlag.WALL))
+            {
+                this.numHits = 0;
             }
         }
 
@@ -55,10 +59,11 @@ export default class SimpleProjectileComp extends BaseComp
         {
             app.game.removeUpdateCallback(this.updateCallback);
             const animComp = this.entity.getComponent(AnimSpriteComp)!;
-            this.physics.velocity.scale(.1);
-            TweenMax.to(animComp.anim.sprite, .2, {alpha:0, onComplete:() =>
+            this.physics.velocity.set(0,0);
+            this.physics.collider.collisionRatioIn = 0;
+            TweenMax.to(animComp.anim.sprite, .1, {alpha:0, onComplete:() =>
                 {
-                    this.destroyEntity()
+                    this.destroyEntity();
                 }})
         }
     }

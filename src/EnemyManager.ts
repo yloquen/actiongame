@@ -5,8 +5,9 @@ import AnimSpriteComp from "./entity/AnimSpriteComp";
 import E_SpriteState from "./const/E_SpriteState";
 import Point from "./geom/Point";
 import E_UpdateStep from "./const/E_UpdateStep";
-import BaseEnemy from "./entity/BaseEnemy";
-import EnemyMover from "./entity/EnemyMover";
+import BaseEnemyComp from "./entity/BaseEnemyComp";
+import EnemyMoveComp from "./entity/EnemyMoveComp";
+import CircleCollider from "./physics/CircleCollider";
 
 export default class EnemyManager
 {
@@ -23,7 +24,7 @@ export default class EnemyManager
     init():void
     {
         // app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.FINAL);
-        // for (let i = 0; i < 100; i++)
+        // for (let i = 0; i < 800; i++)
         // {
         //     this.createEnemy();
         // }
@@ -55,8 +56,8 @@ export default class EnemyManager
                             pos:pos,
                             collider:
                             {
-                                type: E_ColliderType.CIRCLE,
-                                radius:20,
+                                type:CircleCollider,
+                                radius:app.model.scale*4,
                                 receiveCollisions:true,
                                 collisionRatioOut:1,
                                 collisionRatioIn:1
@@ -83,11 +84,11 @@ export default class EnemyManager
                             ]
                         },
                         {
-                            compType:BaseEnemy,
+                            compType:BaseEnemyComp,
                             health:5
                         },
                         {
-                            compType:EnemyMover
+                            compType:EnemyMoveComp
                         }
                     ]
             }

@@ -6,7 +6,7 @@ import AnimSpriteComp from "./AnimSpriteComp";
 import E_UpdateStep from "../const/E_UpdateStep";
 import Point from "../geom/Point";
 
-export default class EnemyMover extends BaseComp
+export default class EnemyMoveComp extends BaseComp
 {
 
     private health:any;

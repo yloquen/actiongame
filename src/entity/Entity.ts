@@ -3,10 +3,17 @@ import BaseComp from "./BaseComp";
 
 export type Constructor<T> = { new (...args: any[]): T };
 
+export enum E_EFlag
+{
+    WALL
+}
+
 export default class Entity
 {
 
     public components: BaseComp[];
+
+    private flags:boolean[];
 
 
     constructor(entityData:any)
@@ -18,7 +25,16 @@ export default class Entity
             entityData.components.forEach( (compData:any) => this.createComponent(compData) );
         }
 
+        this.flags = [];
+        entityData.flags?.forEach((f:E_EFlag) => {this.flags[f] = true});
+
         this.components.forEach(c => c.init());
+    }
+
+
+    hasFlag(flag:E_EFlag):boolean
+    {
+        return this.flags[flag];
     }
 
 
@@ -59,6 +75,10 @@ export default class Entity
 
     destroy():void
     {
-        this.components.forEach(c => c.destroy());
+        this.components.forEach(c => {
+            c.destroy();
+        });
     }
+
+
 }

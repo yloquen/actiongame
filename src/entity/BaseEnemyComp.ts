@@ -4,7 +4,7 @@ import BaseComp from "./BaseComp";
 import PhysicsComp from "./PhysicsComp";
 import AnimSpriteComp from "./AnimSpriteComp";
 
-export default class BaseEnemy extends BaseComp
+export default class BaseEnemyComp extends BaseComp
 {
     private health:any;
     private physics:PhysicsComp;

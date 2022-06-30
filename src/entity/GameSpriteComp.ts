@@ -4,7 +4,7 @@ import Entity from "./Entity";
 import BaseComp from "./BaseComp";
 import PhysicsComp from "./PhysicsComp";
 
-export default class extends BaseComp
+export default class GameSpriteComp extends BaseComp
 {
     protected sprite:PIXI.Sprite;
     protected physics:PhysicsComp;
@@ -15,7 +15,7 @@ export default class extends BaseComp
 
         this.sprite = app.assets.getSprite(this.data.texId);
         this.sprite.anchor.set(.5);
-        this.sprite.scale.set(5);
+        this.sprite.scale.set(app.model.scale);
         app.pixi.stage.addChild(this.sprite);
 
         const p = this.entity.getComponent(PhysicsComp);

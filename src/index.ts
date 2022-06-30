@@ -3,11 +3,12 @@ import Game from "./Game";
 import Assets from "./Assets";
 import ViewManager from "./ViewManager";
 import EnemyManager from "./EnemyManager";
-import PhysicsEngine from "./PhysicsEngine";
+import PhysicsEngine from "./physics/PhysicsEngine";
 import SoundController from "./SoundController";
 import C_Game from "./const/C_Game";
-import GamepadController from "./entity/GamepadController";
+import GamepadController from "./GamepadController";
 import MapGenerator from "./MapGenerator";
+import Model from "./Model";
 
 
 
@@ -19,6 +20,7 @@ export const app:any =
         height: window.innerHeight,
         backgroundColor: 0x2c3e50
     }),
+    model:new Model(),
     assets:new Assets(),
     game:new Game(),
     viewManager:new ViewManager(),

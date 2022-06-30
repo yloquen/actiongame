@@ -1,15 +1,19 @@
 import Entity from "./entity/Entity";
-import KeyboardController from "./entity/KeyboardController";
+import KeyboardController from "./KeyboardController";
 import PhysicsComp, {E_ColliderType} from "./entity/PhysicsComp";
 import {app} from "./index";
 import Point from "./geom/Point";
 import AnimSpriteComp from "./entity/AnimSpriteComp";
 import E_SpriteState from "./const/E_SpriteState";
 import E_UpdateStep from "./const/E_UpdateStep";
-import GamepadController from "./entity/GamepadController";
+import GamepadController from "./GamepadController";
 import Util from "./util/Util";
 import WeaponsComp from "./entity/WeaponsComp";
 import CharControlComp from "./entity/CharControlComp";
+import CircleCollider from "./physics/CircleCollider";
+import SimpleProjectileComp from "./entity/SimpleProjectileComp";
+import Rectangle = PIXI.Rectangle;
+import RectCollider from "./physics/RectCollider";
 
 export type UpdateData =
 {
@@ -42,38 +46,46 @@ export default class Game
 
     init():void
     {
-        const e = new Entity(
-            {
-                components:
+        let e = new Entity({
+            components:
+            [
+                {
+                    compType:PhysicsComp,
+                    pos:{x:300, y:300},
+                    collider:
+                    {
+                        type: CircleCollider,
+                        radius:app.model.scale*5,
+                        collisionRatioOut:1,
+                        collisionRatioIn:1
+                    }
+                },
+                {
+                    compType:AnimSpriteComp,
+                    animData:
                     [
                         {
-                            compType:PhysicsComp,
-                            pos:{x:200, y:200},
-                            collider:
-                            {
-                                type: E_ColliderType.CIRCLE,
-                                radius:25,
-                                collisionRatioOut:1,
-                                collisionRatioIn:0
-                            }
+                            stateName:E_SpriteState.IDLE,
+                            numFrames:6, updateTime:100,
+                            texturePrefix:"knight_idle_anim_f",
+                            frame:0
                         },
                         {
-                            compType:AnimSpriteComp,
-                            animData:
-                            [
-                                { stateName:E_SpriteState.IDLE, numFrames:6, updateTime:100, texturePrefix:"knight_idle_anim_f", frame:0 },
-                                { stateName:E_SpriteState.WALK, numFrames:6, updateTime:100, texturePrefix:"knight_run_anim_f", frame:0 }
-                            ]
-                        },
-                        {
-                            compType:CharControlComp
-                        },
-                        {
-                            compType:WeaponsComp
+                            stateName:E_SpriteState.WALK,
+                            numFrames:6, updateTime:100,
+                            texturePrefix:"knight_run_anim_f",
+                            frame:0
                         }
                     ]
-            }
-        );
+                },
+                {
+                    compType:CharControlComp
+                },
+                {
+                    compType:WeaponsComp
+                }
+            ]
+        });
 
         this.character = e;
 

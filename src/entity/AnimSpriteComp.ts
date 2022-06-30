@@ -48,7 +48,7 @@ export default class AnimSpriteComp extends BaseComp
 
     playDeathAnimation():void
     {
-        TweenMax.to(this.anim.sprite, .2, {alpha:0, onComplete:() =>
+        gsap.to(this.anim.sprite, .2, {alpha:0, onComplete:() =>
             {
                 this.destroyEntity();
             }});
