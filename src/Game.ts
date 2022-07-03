@@ -8,12 +8,13 @@ import E_SpriteState from "./const/E_SpriteState";
 import E_UpdateStep from "./const/E_UpdateStep";
 import GamepadController from "./GamepadController";
 import Util from "./util/Util";
-import WeaponsComp from "./entity/WeaponsComp";
+import ShooterComp from "./entity/ShooterComp";
 import CharControlComp from "./entity/CharControlComp";
 import CircleCollider from "./physics/CircleCollider";
 import SimpleProjectileComp from "./entity/SimpleProjectileComp";
 import Rectangle = PIXI.Rectangle;
 import RectCollider from "./physics/RectCollider";
+import BeamComp from "./entity/BeamComp";
 
 export type UpdateData =
 {
@@ -43,7 +44,6 @@ export default class Game
     }
 
 
-
     init():void
     {
         let e = new Entity({
@@ -51,7 +51,7 @@ export default class Game
             [
                 {
                     compType:PhysicsComp,
-                    pos:{x:300, y:300},
+                    pos:{x:1000, y:600},
                     collider:
                     {
                         type: CircleCollider,
@@ -82,7 +82,10 @@ export default class Game
                     compType:CharControlComp
                 },
                 {
-                    compType:WeaponsComp
+                    compType:ShooterComp
+                },
+                {
+                    compType:BeamComp
                 }
             ]
         });
@@ -90,6 +93,8 @@ export default class Game
         this.character = e;
 
         app.pixi.ticker.add(this.update.bind(this));
+
+
     }
 
 

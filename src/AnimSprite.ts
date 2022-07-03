@@ -41,7 +41,7 @@ export default class AnimSprite
         this.sprite.anchor.set(.5);
         this.sprite.scale.set(app.model.scale);
 
-        app.viewManager.addChild(E_ViewLayer.CHARACTERS, this.sprite);
+        app.viewManager.addChild(E_ViewLayer.CHARACTERS_1, this.sprite);
 
         this.updateData = app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.FINAL);
     }

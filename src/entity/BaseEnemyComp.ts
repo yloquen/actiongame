@@ -24,7 +24,7 @@ export default class BaseEnemyComp extends BaseComp
         this.health = Math.max(0, this.health - damageQty);
 
         const s = this.entity.getComponent(AnimSpriteComp)!;
-        s.playDamageAnim();
+        s.playDamageAnim(damageQty);
 
         if (this.health === 0)
         {

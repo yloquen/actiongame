@@ -53,5 +53,59 @@ export default class
     }
 
 
+    getTF(text:string, size:number, font:string|undefined=undefined, color:string|undefined=undefined, options:any={}):PIXI.Text
+    {
+        font = font === undefined ? 'Upheaval' : font;
+        color = color === undefined ? '#ffffff' : color;
+        size = Math.round(size);
+
+        if (font !== "Upheaval")
+        {
+            font = "\"" + font + "\", Geneva, Arial, sans-serif";
+        }
+
+        const styleVars =
+        {
+            fontFamily: font,
+            fontSize: size,
+            fill: color,
+            align: options.align ? options.align : 'center',
+            ...options
+        };
+
+
+        if (options.lineHeight !== undefined)
+        {
+            styleVars.lineHeight = Math.round(size * options.lineHeight);
+        }
+
+        if (options.wrapWidth !== undefined)
+        {
+            styleVars.wordWrap = true;
+            styleVars.wordWrapWidth = options.wrapWidth;
+        }
+
+        const defTextStyle = new PIXI.TextStyle(styleVars);
+
+        return new PIXI.Text(text, defTextStyle);
+    }
+
+
+    createNumber(n:number):PIXI.Sprite
+    {
+        const container = new PIXI.Sprite();
+        const digits = n.toFixed(0).split("");
+        digits.forEach(d =>
+        {
+            const s = app.assets.getSprite("d" + d);
+            s.tint = 0xff0000;
+            s.scale.set(app.model.scale * .6);
+            container.addChild(s);
+        });
+
+        return container;
+    }
+
+
 
 }

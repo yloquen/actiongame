@@ -16,7 +16,7 @@ export default class EnemyManager
 
     constructor()
     {
-        this.spawnInterval = 700;
+        this.spawnInterval = 1000;
         this.spawnTimer = this.spawnInterval;
     }
 
@@ -24,10 +24,10 @@ export default class EnemyManager
     init():void
     {
         // app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.FINAL);
-        // for (let i = 0; i < 800; i++)
-        // {
-        //     this.createEnemy();
-        // }
+        for (let i = 0; i < 100; i++)
+        {
+            this.createEnemy();
+        }
     }
 
 

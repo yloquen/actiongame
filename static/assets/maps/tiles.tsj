@@ -8,7 +8,7 @@
  "margin":0,
  "name":"tiles",
  "spacing":0,
- "tilecount":40,
+ "tilecount":41,
  "tiledversion":"1.8.6",
  "tileheight":16,
  "tiles":[
@@ -249,6 +249,12 @@
         {
          "id":39,
          "image":"..\/..\/..\/design\/assets\/terrain\/floor\/stair_nextlevel.png",
+         "imageheight":16,
+         "imagewidth":16
+        }, 
+        {
+         "id":40,
+         "image":"..\/..\/..\/design\/assets\/terrain\/wall\/empty.png",
          "imageheight":16,
          "imagewidth":16
         }],

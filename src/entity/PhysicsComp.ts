@@ -5,6 +5,7 @@ import {app} from "../index";
 import Point from "../geom/Point";
 import BaseCollider from "../physics/BaseCollider";
 import E_UpdateStep from "../const/E_UpdateStep";
+import CharControlComp from "./CharControlComp";
 
 export enum E_ColliderType
 {
@@ -15,12 +16,11 @@ export enum E_ColliderType
 export default class PhysicsComp extends BaseComp
 {
 
+    public collider:BaseCollider;
     public position:Point;
     public velocity:Point;
 
     private mass:number;
-    collider:BaseCollider;
-
 
 
     init():void

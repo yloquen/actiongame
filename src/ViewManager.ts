@@ -6,16 +6,18 @@ export enum E_ViewLayer
 {
     TERRAIN_UNDER_1,
     TERRAIN_UNDER_2,
-    CHARACTERS,
+    CHARACTERS_1,
+    CHARACTERS_2,
     TERRAIN_OVER_1,
-    TERRAIN_OVER_2
+    TERRAIN_OVER_2,
+    INTERFACE
 }
 
-export default class
+export default class ViewManager
 {
-    private layers:PIXI.Sprite[];
-    private mainContainer:PIXI.Sprite;
+    public mainContainer:PIXI.Sprite;
 
+    private layers:PIXI.Sprite[];
 
     constructor()
     {
@@ -31,6 +33,14 @@ export default class
                 this.layers[layer] = s;
             }
         }
+
+        window.addEventListener("resize", this.onResize.bind(this));
+    }
+
+
+    onResize():void
+    {
+        app.pixi.renderer.resize(window.innerWidth, window.innerHeight);
     }
 
 
@@ -44,6 +54,12 @@ export default class
     addChild(layerName:E_ViewLayer, s:PIXI.Sprite):void
     {
         this.layers[layerName].addChild(s);
+    }
+
+
+    getLayer(layerName:E_ViewLayer):PIXI.Sprite
+    {
+        return this.layers[layerName];
     }
 
 

@@ -35,10 +35,23 @@ export default class PhysicsEngine
 
     removeCollider(c:BaseCollider):void
     {
-        this.colliders.splice(this.colliders.indexOf(c), 1);
-        const bounds = c.getBounds();
-        this.bounds.splice(this.bounds.indexOf(bounds[0]), 1);
-        this.bounds.splice(this.bounds.indexOf(bounds[1]), 1);
+        const index = this.colliders.indexOf(c);
+        if (index !== -1)
+        {
+            this.colliders.splice(index, 1);
+            const bounds = c.getBounds().forEach(b =>
+            {
+                const bIdx = this.bounds.indexOf(b);
+                if (bIdx !== -1)
+                {
+                    this.bounds.splice(bIdx, 1);
+                }
+                else
+                {
+                    throw new Error("Bounds error");
+                }
+            });
+        }
     }
 
 
@@ -72,8 +85,8 @@ export default class PhysicsEngine
     checkCollisions():void
     {
         // Util.startBenchmark();
+        // console.log(">" + this.colliders.length);
 
-        console.log(">" + this.colliders.length);
         this.colliders.forEach(c =>
         {
             c.updateBounds();
@@ -123,14 +136,11 @@ export default class PhysicsEngine
 
     test(c1:BaseCollider, c2:BaseCollider):[CollisionResult, CollisionResult]|undefined
     {
-        /*
         if (c1.type === CircleCollider && c2.type === CircleCollider)
         {
             return this.testCirclesCollision(c1, c2);
         }
-        else
-        */
-        if (c1.type === CircleCollider && c2.type === RectCollider ||
+        else if (c1.type === CircleCollider && c2.type === RectCollider ||
             c1.type === RectCollider && c2.type === CircleCollider)
         {
             return this.testCircVsRect(c1, c2);
@@ -138,8 +148,8 @@ export default class PhysicsEngine
     }
 
 
-    /*
-    testCirclesCollision(col1:BaseCollider, col2:BaseCollider):CollisionResult|undefined
+
+    testCirclesCollision(col1:BaseCollider, col2:BaseCollider):[CollisionResult, CollisionResult]|undefined
     {
         let c1 = col1 as CircleCollider;
         let c2 = col2 as CircleCollider;
@@ -147,8 +157,8 @@ export default class PhysicsEngine
         const deltaX = c1.physics.position.x - c2.physics.position.x;
         const deltaY = c1.physics.position.y - c2.physics.position.y;
 
-        this.collisionResults[0].set(deltaX, deltaY);
-        const distance = this.collisionResults[0].length();
+        this.tempPts[0].set(deltaX, deltaY);
+        const distance = this.tempPts[0].length();
         const radiusSum = (c1.radius + c2.radius);
         const penetration = radiusSum - distance;
 
@@ -159,19 +169,20 @@ export default class PhysicsEngine
 
         if (distance === 0)
         {
-            this.collisionResults[0].x = (Math.random() - .5) * 0.01;
-            this.collisionResults[0].y = (Math.random() - .5) * 0.01;
+            this.tempPts[0].x = (Math.random() - .5) * 0.01;
+            this.tempPts[0].y = (Math.random() - .5) * 0.01;
         }
 
-        this.collisionResults[0].normalize();
-        this.collisionResults[0].scale(penetration * (c1.radius / radiusSum));
-        this.collisionResults[1].copyFrom(this.collisionResults[0]);
+        this.tempPts[0].normalize();
+        this.tempPts[0].scale(penetration * (c1.radius / radiusSum));
+        this.tempPts[1].copyFrom(this.tempPts[0]);
 
-        this.collisionResults[1].scale(-1);
+        this.tempPts[1].scale(-1);
+        this.collisionResults[0].target.copyFrom(this.tempPts[0]);
+        this.collisionResults[1].target.copyFrom(this.tempPts[1]);
 
         return this.collisionResults;
     }
-    */
 
 
     testCircVsRect(c1:BaseCollider, c2:BaseCollider):[CollisionResult, CollisionResult]|undefined
@@ -265,8 +276,6 @@ export default class PhysicsEngine
         {
             return;
         }
-
-        console.log(xMove + " " + yMove);
 
         this.collisionResults[0].target.set(0,0);
         this.collisionResults[1].target.set(0,0);

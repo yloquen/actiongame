@@ -12,29 +12,27 @@ import {Cubic, TweenMax} from "gsap";
 import {E_ViewLayer} from "../ViewManager";
 import WaveBeam from "../misc/WaveBeam";
 import CircleCollider from "../physics/CircleCollider";
+import CharControlComp from "./CharControlComp";
 
 
-export default class WeaponsComp extends BaseComp
+export default class ShooterComp extends BaseComp
 {
-    private cooldown:number;
     private aimVector:Point;
     private physics:PhysicsComp;
-    private chargeTime:number;
-    private maxChargeTime:number = 1000;
 
-    private waveBeam:WaveBeam;
-    private waveBeamState:boolean;
+    private cooldown:number;
+    private chargeTime:number;
+
+    private charController:CharControlComp;
 
 
     init():void
     {
         this.physics = this.entity.getComponent(PhysicsComp)!;
+        this.charController = this.entity.getComponent(CharControlComp)!;
+
         this.cooldown = 0;
         this.addUpdateCallback(this.update.bind(this), E_UpdateStep.CREATION);
-
-        this.waveBeam = new WaveBeam();
-        app.viewManager.addChild(E_ViewLayer.CHARACTERS, this.waveBeam.sprite);
-        this.waveBeam.sprite.visible = false;
 
         this.chargeTime = 0;
     }
@@ -42,39 +40,15 @@ export default class WeaponsComp extends BaseComp
 
     update(delta:number):void
     {
-        const aimVecLen = this.aimVector.length();
-
-        this.chargeTime += delta;
-        const p = Math.min(1, this.chargeTime/this.maxChargeTime);
-        this.waveBeam.render(p);
-
-        this.waveBeam.sprite.x = this.physics.position.x;
-        this.waveBeam.sprite.y = this.physics.position.y;
-
         this.cooldown -= delta;
 
-        if (aimVecLen > 0)
+        this.aimVector = this.charController.getAimVector();
+
+        if (this.aimVector.length() > 0 && this.charController.isSkillActive(3) && this.cooldown <= 0)
         {
-            if (this.waveBeamState)
-            {
-                const targetAngle = Math.atan2(this.aimVector.y, this.aimVector.x) + Math.PI * 10;
-                TweenMax.to(this.waveBeam.sprite, .15, {ease:Cubic.easeIn, rotation:targetAngle});
-            }
-            else
-            {
-                if (this.cooldown <= 0)
-                {
-                    this.cooldown = 100;
-                    this.shoot();
-                }
-            }
+            this.cooldown = 100;
+            this.shoot();
         }
-    }
-
-
-    setAimVector(aimVector:Point):void
-    {
-        this.aimVector = aimVector;
     }
 
 
@@ -119,21 +93,17 @@ export default class WeaponsComp extends BaseComp
                     compType:SimpleProjectileComp,
                     numHits:1,
                     minDamage:1,
-                    deltaDamage:7
+                    deltaDamage:7,
+                    maxLifetime:3000
                 }
             ]
         });
 
-        this.physics.position.x -= this.aimVector.x * 2.5;
-        this.physics.position.y -= this.aimVector.y * 2.5;
+        this.physics.position.x -= this.aimVector.x * 1.5;
+        this.physics.position.y -= this.aimVector.y * 1.5;
 
         app.sound.playSound("shoot", .4);
     }
 
 
-    setWaveBeamState(state:boolean):void
-    {
-        this.waveBeam.sprite.visible = state;
-        this.waveBeamState = state;
-    }
 }

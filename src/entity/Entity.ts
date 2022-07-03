@@ -1,5 +1,6 @@
 
 import BaseComp from "./BaseComp";
+import Util from "../util/Util";
 
 export type Constructor<T> = { new (...args: any[]): T };
 
@@ -10,14 +11,18 @@ export enum E_EFlag
 
 export default class Entity
 {
+    public uid:number;
 
     public components: BaseComp[];
 
     private flags:boolean[];
 
 
+
     constructor(entityData:any)
     {
+        this.uid = Util.getUID();
+
         this.components = [];
 
         if (entityData && entityData.components)
@@ -75,9 +80,8 @@ export default class Entity
 
     destroy():void
     {
-        this.components.forEach(c => {
-            c.destroy();
-        });
+        this.components.forEach(c => c.destroy());
+        this.components.length = 0;
     }
 
 

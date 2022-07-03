@@ -1,6 +1,7 @@
 export default class Util
 {
-    static benchmarkStartTS:number;
+    private static benchmarkStartTS:number;
+    private static uidCounter:number = 0;
 
     static startBenchmark():void
     {
@@ -10,5 +11,10 @@ export default class Util
     static endBenchmark():void
     {
         console.log("===> " + (new Date().getTime() - Util.benchmarkStartTS));
+    }
+
+    static getUID():number
+    {
+        return Util.uidCounter++;
     }
 }

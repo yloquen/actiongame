@@ -5,7 +5,7 @@ import PhysicsComp, {E_ColliderType} from "./entity/PhysicsComp";
 import AnimSpriteComp from "./entity/AnimSpriteComp";
 import E_SpriteState from "./const/E_SpriteState";
 import CharControlComp from "./entity/CharControlComp";
-import WeaponsComp from "./entity/WeaponsComp";
+
 import RectCollider from "./physics/RectCollider";
 import { E_EFlag } from "./entity/Entity";
 
@@ -21,7 +21,7 @@ export default class MapGenerator
     {
         this.textureDictionary = [];
 
-        const mapData = JSON.parse(app.assets.resources.tilemap?.data);
+        const mapData = JSON.parse(app.assets.resources.tilemap2?.data);
         const tileSetData = JSON.parse(app.assets.resources.tileset?.data);
 
         tileSetData.tiles.forEach((tileData:any) =>
@@ -77,12 +77,15 @@ export default class MapGenerator
                     if (tileId !== 0)
                     {
                         const textureId = this.textureDictionary[tileId];
-                        const s = app.assets.getSprite(textureId);
-                        s.scale.set(app.model.scale);
-                        s.anchor.set(.5);
-                        s.x = xPos;
-                        s.y = yPos;
-                        app.viewManager.addChild(layerIdx, s);
+                        if (textureId !== "empty")
+                        {
+                            const s = app.assets.getSprite(textureId);
+                            s.scale.set(app.model.scale);
+                            s.anchor.set(.5);
+                            s.x = xPos;
+                            s.y = yPos;
+                            app.viewManager.addChild(layerIdx, s);
+                        }
                     }
 
                     this.createTileEntities(tileId, xPos, yPos);
@@ -96,7 +99,7 @@ export default class MapGenerator
     {
         switch (tileId)
         {
-            case 1:
+            case 41:
             {
                 const e = new Entity({
                     components:

@@ -5,7 +5,10 @@
   "savePath": "D:\\projects\\CardGameEngine\\static\\assets",
   "images": [],
   "folders": [
-    "D:/projects/CardGameEngine/design/interface"
+    "D:/projects/actiongame/design/assets/bat",
+    "D:/projects/actiongame/design/assets/digits",
+    "D:/projects/actiongame/design/assets/knight",
+    "D:/projects/actiongame/design/assets/terrain"
   ],
   "packOptions": {
     "textureName": "main_atlas",

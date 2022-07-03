@@ -14,6 +14,7 @@ export default class SimpleProjectileComp extends BaseComp
     private minDamage:number;
     private deltaDamage:number;
     private lifetime:number = 0;
+    private maxLifetime:number;
 
 
 
@@ -24,6 +25,7 @@ export default class SimpleProjectileComp extends BaseComp
         this.numHits = this.data.numHits;
         this.minDamage = this.data.minDamage;
         this.deltaDamage = this.data.deltaDamage;
+        this.maxLifetime = this.data.maxLifetime || Number.POSITIVE_INFINITY;
 
         this.updateCallback = app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.COLLISION_HANDLING);
     }
@@ -32,10 +34,6 @@ export default class SimpleProjectileComp extends BaseComp
     update(delta:number):void
     {
         this.lifetime += delta;
-        if (this.lifetime > 3000)
-        {
-            this.numHits = 0;
-        }
 
         const collisions = this.physics.collider.collisions;
         while (collisions.length > 0 && this.numHits > 0)
@@ -58,13 +56,27 @@ export default class SimpleProjectileComp extends BaseComp
         if (this.numHits === 0)
         {
             app.game.removeUpdateCallback(this.updateCallback);
-            const animComp = this.entity.getComponent(AnimSpriteComp)!;
             this.physics.velocity.set(0,0);
             this.physics.collider.collisionRatioIn = 0;
-            TweenMax.to(animComp.anim.sprite, .1, {alpha:0, onComplete:() =>
-                {
-                    this.destroyEntity();
-                }})
+
+            const animComp = this.entity.getComponent(AnimSpriteComp)!;
+            if (animComp)
+            {
+                TweenMax.to(animComp.anim.sprite, .1, {alpha:0, onComplete:() =>
+                    {
+                        this.destroyEntity();
+                    }})
+            }
+            else
+            {
+                this.destroyEntity();
+            }
+
+        }
+
+        if (this.lifetime > this.maxLifetime)
+        {
+            this.numHits = 0;
         }
     }
 
