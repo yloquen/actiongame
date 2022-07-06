@@ -17,4 +17,16 @@ export default class Util
     {
         return Util.uidCounter++;
     }
+
+    static swap(tuple:[any, any] | undefined)
+    {
+        if (tuple)
+        {
+            const temp = tuple[0];
+            tuple[0] = tuple[1];
+            tuple[1] = temp;
+            return tuple;
+        }
+        return undefined;
+    }
 }

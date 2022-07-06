@@ -21,8 +21,8 @@ export default class CircleCollider extends BaseCollider
     updateBounds():void
     {
         const pos = this.physics.position;
-        this.bounds[0].coord= pos.x - this.radius;
-        this.bounds[1].coord = pos.x + this.radius;
+        this.bounds[0].x= pos.x - this.radius;
+        this.bounds[1].x = pos.x + this.radius;
     }
 
 

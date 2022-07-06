@@ -10,15 +10,16 @@ import E_SpriteState from "../const/E_SpriteState";
 import SimpleProjectileComp from "./SimpleProjectileComp";
 import CircleCollider from "../physics/CircleCollider";
 import CharControlComp from "./CharControlComp";
+import GrowingProjectileComp from "./GrowingProjectileComp";
 
 
-export default class ShooterComp extends BaseComp
+export default class GrowingProjectileWeaponComp extends BaseComp
 {
     private aimVector:Point;
     private physics:PhysicsComp;
 
     private cooldown:number;
-    private chargeTime:number;
+
 
     private charController:CharControlComp;
 
@@ -31,7 +32,6 @@ export default class ShooterComp extends BaseComp
         this.cooldown = 0;
         this.addUpdateCallback(this.update.bind(this), E_UpdateStep.CREATION);
 
-        this.chargeTime = 0;
     }
 
 
@@ -41,9 +41,9 @@ export default class ShooterComp extends BaseComp
 
         this.aimVector = this.charController.getAimVector();
 
-        if (this.aimVector.length() > 0 && this.charController.isSkillActive(3) && this.cooldown <= 0)
+        if (this.aimVector.length() > 0 && this.charController.isSkillActive(1) && this.cooldown <= 0)
         {
-            this.cooldown = 100;
+            this.cooldown = 1000;
             this.shoot();
         }
     }
@@ -51,6 +51,9 @@ export default class ShooterComp extends BaseComp
 
     private shoot():void
     {
+        const velocity = this.aimVector.clone();
+        velocity.scale(.2);
+
         const e = new Entity(
         {
             components:
@@ -58,17 +61,18 @@ export default class ShooterComp extends BaseComp
                 {
                     compType:PhysicsComp,
                     pos:this.physics.position,
-                    velocity:this.aimVector,
+                    velocity:velocity,
                     collider:
                     {
                         type:CircleCollider,
                         radius:app.model.scale*3,
-                        ratioOut:.25,
+                        ratioOut:0,
                         ratioIn:0
                     }
                 },
                 {
                     compType:AnimSpriteComp,
+                    alpha:.6,
                     animData:
                     [
                         {
@@ -87,11 +91,11 @@ export default class ShooterComp extends BaseComp
                     ]
                 },
                 {
-                    compType:SimpleProjectileComp,
+                    compType:GrowingProjectileComp,
                     numHits:1,
-                    minDamage:5,
-                    deltaDamage:20,
-                    maxLifetime:3000
+                    minDamage:2,
+                    deltaDamage:2,
+                    maxLifetime:4000
                 }
             ]
         });

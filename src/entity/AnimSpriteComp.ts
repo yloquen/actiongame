@@ -7,6 +7,7 @@ import E_UpdateStep from "../const/E_UpdateStep";
 import {gsap} from "gsap";
 import {E_ViewLayer} from "../ViewManager";
 import * as PIXI from "pixi.js";
+import Entity from "./Entity";
 
 export default class AnimSpriteComp extends BaseComp
 {
@@ -16,16 +17,25 @@ export default class AnimSpriteComp extends BaseComp
 
     private tempPt:PIXI.Point;
 
+
+    constructor(e:Entity, data:any)
+    {
+        super(e, data);
+        this.tempPt = new PIXI.Point();
+        this.anim = new AnimSprite(this.data.animData);
+    }
+
     init():void
     {
         this.physics = this.entity.getComponent(PhysicsComp)!;
-        this.anim = new AnimSprite(this.data.animData);
+
         this.anim.sprite.x = this.physics.position.x;
         this.anim.sprite.y = this.physics.position.y;
+        this.anim.sprite.alpha = this.data.alpha || 1;
         // this.anim.sprite.scale.set(15);
         this.addUpdateCallback(this.update.bind(this), E_UpdateStep.MOVEMENT);
 
-        this.tempPt = new PIXI.Point();
+
     }
 
     update():void

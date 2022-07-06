@@ -19,7 +19,7 @@ export default class BaseEnemyComp extends BaseComp
 
     applyDamage(damageQty:number):void
     {
-        app.sound.playSound("hit");
+        app.sound.playSound("hit", .3);
 
         this.health = Math.max(0, this.health - damageQty);
 

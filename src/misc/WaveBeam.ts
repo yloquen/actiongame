@@ -84,8 +84,8 @@ export default class WaveBeam
                     {
                         type:CircleCollider,
                         radius:size,
-                        collisionRatioOut:.25,
-                        collisionRatioIn:1
+                        ratioOut:.25,
+                        ratioIn:1
                     }
                 },
                 /*{

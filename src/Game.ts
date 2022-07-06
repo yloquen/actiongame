@@ -15,6 +15,8 @@ import SimpleProjectileComp from "./entity/SimpleProjectileComp";
 import Rectangle = PIXI.Rectangle;
 import RectCollider from "./physics/RectCollider";
 import BeamComp from "./entity/BeamComp";
+import GrowingProjectileComp from "./entity/GrowingProjectileComp";
+import GrowingProjectileWeaponComp from "./entity/GrowingProjectileWeaponComp";
 
 export type UpdateData =
 {
@@ -56,8 +58,8 @@ export default class Game
                     {
                         type: CircleCollider,
                         radius:app.model.scale*5,
-                        collisionRatioOut:1,
-                        collisionRatioIn:1
+                        ratioOut:1,
+                        ratioIn:1
                     }
                 },
                 {
@@ -86,6 +88,9 @@ export default class Game
                 },
                 {
                     compType:BeamComp
+                },
+                {
+                    compType:GrowingProjectileWeaponComp
                 }
             ]
         });

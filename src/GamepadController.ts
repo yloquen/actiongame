@@ -54,11 +54,11 @@ export default class GamepadController
         this.aimVector.x = gamepad.axes[2];
         this.aimVector.y = gamepad.axes[3];
         this.processVector(this.aimVector);
-        this.aimVector.scale(1);
-        if (this.aimVector.length() > 0)
-        {
-            this.aimVector.add(this.velocity);
-        }
+        // this.aimVector.scale(1);
+        // if (this.aimVector.length() > 0)
+        // {
+        //     this.aimVector.add(this.velocity);
+        // }
 
         this.buttonChanges.length = 0;
         gamepad.buttons.forEach((b,index) =>

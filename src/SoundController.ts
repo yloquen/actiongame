@@ -53,6 +53,14 @@ export default class SoundController
     }
 
 
-
-
+    playLoopedSound(sndId:string, volume:number, loopPoint:number):Howl
+    {
+        const sound = this.createSound(sndId, volume);
+        sound.on('end', () => {
+            sound.seek(loopPoint);
+            sound.play();
+        });
+        sound.play();
+        return sound;
+    }
 }

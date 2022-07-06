@@ -95,12 +95,22 @@ export default class
     {
         const container = new PIXI.Sprite();
         const digits = n.toFixed(0).split("");
+        let x = 0;
         digits.forEach(d =>
         {
             const s = app.assets.getSprite("d" + d);
             s.tint = 0xff0000;
             s.scale.set(app.model.scale * .6);
+            s.x = x;
+            s.anchor.set(0,.5);
+            x+= s.width;
             container.addChild(s);
+        });
+
+        const halfWidth = x * .5;
+        container.children.forEach(c =>
+        {
+            c.x -= halfWidth;
         });
 
         return container;

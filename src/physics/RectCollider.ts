@@ -28,8 +28,8 @@ export default class RectCollider extends BaseCollider
     updateBounds():void
     {
         const pos = this.physics.position;
-        this.bounds[0].coord= pos.x - this.halfWidth;
-        this.bounds[1].coord = pos.x + this.halfWidth;
+        this.bounds[0].x= pos.x - this.halfWidth;
+        this.bounds[1].x = pos.x + this.halfWidth;
     }
 
 

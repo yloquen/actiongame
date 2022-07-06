@@ -8,6 +8,8 @@ import CharControlComp from "./entity/CharControlComp";
 
 import RectCollider from "./physics/RectCollider";
 import { E_EFlag } from "./entity/Entity";
+import PolyCollider from "./physics/PolyCollider";
+import SpriteComp from "./entity/SpriteComp";
 
 
 export default class MapGenerator
@@ -21,7 +23,7 @@ export default class MapGenerator
     {
         this.textureDictionary = [];
 
-        const mapData = JSON.parse(app.assets.resources.tilemap2?.data);
+        const mapData = JSON.parse(app.assets.resources.tilemap1?.data);
         const tileSetData = JSON.parse(app.assets.resources.tileset?.data);
 
         tileSetData.tiles.forEach((tileData:any) =>
@@ -74,55 +76,93 @@ export default class MapGenerator
                     const xPos = (8 + x * 16) * app.model.scale;
                     const yPos = (8 + y * 16) * app.model.scale;
 
-                    if (tileId !== 0)
-                    {
-                        const textureId = this.textureDictionary[tileId];
-                        if (textureId !== "empty")
-                        {
-                            const s = app.assets.getSprite(textureId);
-                            s.scale.set(app.model.scale);
-                            s.anchor.set(.5);
-                            s.x = xPos;
-                            s.y = yPos;
-                            app.viewManager.addChild(layerIdx, s);
-                        }
-                    }
-
-                    this.createTileEntities(tileId, xPos, yPos);
+                    this.createTileEntities(tileId, xPos, yPos, layerId);
                 }
             }
         }
     }
 
 
-    createTileEntities(tileId:number, xPos:number, yPos:number):void
+    createTileEntities(tileId:number, xPos:number, yPos:number, layerId:E_ViewLayer):void
     {
+        /*
+        if (tileId !== 0)
+        {
+            if (textureId !== "empty")
+            {
+                const s = app.assets.getSprite(textureId);
+                s.scale.set(app.model.scale);
+                s.anchor.set(.5);
+                s.x = xPos;
+                s.y = yPos;
+                app.viewManager.addChild(layerIdx, s);
+            }
+        }
+        */
+
+        const entityData:any =
+        {
+            components:[],
+            flags:[]
+        };
+
+        const textureId = this.textureDictionary[tileId];
+        if (textureId && textureId !== "empty")
+        {
+            entityData.components.push({
+                compType:SpriteComp,
+                textureId:textureId,
+                layer:layerId
+            });
+        }
+
         switch (tileId)
         {
-            case 41:
+
+            case 40:
             {
-                const e = new Entity({
-                    components:
-                    [
-                        {
-                            compType:PhysicsComp,
-                            pos:{x:xPos, y:yPos},
-                            collider:
-                            {
-                                type: RectCollider,
-                                width:app.model.scale * 18,
-                                height:app.model.scale * 18,
-                                collisionRatioOut:1,
-                                collisionRatioIn:0
-                            }
-                        }
-                    ],
-                    flags:[E_EFlag.WALL]
+                const w = app.model.scale * 18;
+                const h = app.model.scale * 18;
+                const hw = w * .5;
+                const hh = h * .5;
+                entityData.components.push({
+                    compType:PhysicsComp,
+                    pos:{x:xPos, y:yPos},
+                    collider:
+                    {
+                        type: PolyCollider,
+                        isStatic: true,
+                        points:[
+                            {x:xPos - hw, y:yPos - hh},
+                            {x:xPos + hw, y:yPos - hh},
+                            {x:xPos + hw, y:yPos + hh},
+                            {x:xPos - hw, y:yPos + hh}
+                        ],
+                        // type: RectCollider,
+                        // width:app.model.scale * 18,
+                        // height:app.model.scale * 18,
+                        ratioOut:1,
+                        ratioIn:0
+                    }
                 });
+
+                entityData.flags.push(E_EFlag.WALL);
+
+                break;
+            }
+
+            default:
+            {
+                entityData.components.push({
+                    compType:PhysicsComp,
+                    pos:{x:xPos, y:yPos}});
 
                 break;
             }
         }
+
+        const e = new Entity(entityData);
+
     }
 
 

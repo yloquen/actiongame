@@ -24,10 +24,10 @@ export default class EnemyManager
     init():void
     {
         // app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.FINAL);
-        for (let i = 0; i < 100; i++)
-        {
-            this.createEnemy();
-        }
+        // for (let i = 0; i < 100; i++)
+        // {
+        //     this.createEnemy();
+        // }
     }
 
 
@@ -59,8 +59,8 @@ export default class EnemyManager
                                 type:CircleCollider,
                                 radius:app.model.scale*4,
                                 receiveCollisions:true,
-                                collisionRatioOut:1,
-                                collisionRatioIn:1
+                                ratioOut:1,
+                                ratioIn:1
                             }
                         },
                         {
@@ -85,7 +85,7 @@ export default class EnemyManager
                         },
                         {
                             compType:BaseEnemyComp,
-                            health:5
+                            health:15
                         },
                         {
                             compType:EnemyMoveComp

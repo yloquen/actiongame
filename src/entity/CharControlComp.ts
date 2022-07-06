@@ -7,6 +7,7 @@ import ShooterComp from "./ShooterComp";
 
 enum E_GamepadButtons
 {
+    L1 = 4,
     R1 = 5,
     R2 = 7
 }
@@ -15,9 +16,10 @@ enum E_GamepadButtons
 export default class CharControlComp extends BaseComp
 {
     private physics:PhysicsComp;
-    private weapons:ShooterComp;
+
     private gpButChanges:number[];
     private gpButStates:boolean[];
+
     private skillsState:boolean[];
 
 
@@ -46,6 +48,12 @@ export default class CharControlComp extends BaseComp
 
                 switch (butChangedIdx)
                 {
+                    case E_GamepadButtons.L1:
+                    {
+                        this.skillsState[1] = this.gpButStates[butChangedIdx];
+                        break;
+                    }
+
                     case E_GamepadButtons.R1:
                     {
                         this.skillsState[3] = this.gpButStates[butChangedIdx];

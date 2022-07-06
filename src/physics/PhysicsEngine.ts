@@ -4,9 +4,13 @@ import CircleCollider from "./CircleCollider";
 import RectCollider from "./RectCollider";
 import MathUtil from "../util/MathUtil";
 import CollisionResult from "./CollisionResult";
+import PolyCollider from "./PolyCollider";
+import Util from "../util/Util";
 
 export default class PhysicsEngine
 {
+    public debug:boolean = true;
+
     private readonly colliders:BaseCollider[];
     private activeBounds:BoundsData[];
     private bounds:BoundsData[];
@@ -89,10 +93,13 @@ export default class PhysicsEngine
 
         this.colliders.forEach(c =>
         {
-            c.updateBounds();
+            if (!c.isStatic)
+            {
+                c.updateBounds();
+            }
             c.collisions.length = 0;
         });
-        this.bounds.sort((e1, e2) => {return e1.coord - e2.coord});
+        this.bounds.sort((e1, e2) => {return e1.x - e2.x});
 
         this.activeBounds.length = 0;
         let activeIdx = 0;
@@ -113,11 +120,15 @@ export default class PhysicsEngine
                     {
                         // c1.addCollisionResult(collisionResult[0]);
                         c1.collisions.push(c2);
-                        c1.physics.position.add(collisionResult[0].target);
+                        let v = collisionResult[0].targetPos;
+                        v.scale(c1.ratioIn * c2.ratioOut);
+                        c1.physics.position.add(v);
 
                         // c2.addCollisionResult(collisionResult[1]);
                         c2.collisions.push(c1);
-                        c2.physics.position.add(collisionResult[1].target);
+                        v = collisionResult[1].targetPos;
+                        v.scale(c1.ratioOut * c2.ratioIn);
+                        c2.physics.position.add(v);
                     }
                 }
             }
@@ -138,22 +149,95 @@ export default class PhysicsEngine
     {
         if (c1.type === CircleCollider && c2.type === CircleCollider)
         {
-            return this.testCirclesCollision(c1, c2);
+            return this.testCircVsCirc(c1 as CircleCollider, c2 as CircleCollider);
         }
-        else if (c1.type === CircleCollider && c2.type === RectCollider ||
-            c1.type === RectCollider && c2.type === CircleCollider)
+        else if (c1.type === CircleCollider && c2.type === PolyCollider)
         {
-            return this.testCircVsRect(c1, c2);
+            return this.testCircVsPoly(c1 as CircleCollider, c2 as PolyCollider);
+        }
+        else if (c1.type === PolyCollider && c2.type === CircleCollider)
+        {
+            return Util.swap(this.testCircVsPoly(c2 as CircleCollider, c1 as PolyCollider));
         }
     }
 
 
-
-    testCirclesCollision(col1:BaseCollider, col2:BaseCollider):[CollisionResult, CollisionResult]|undefined
+    testCircVsPoly(cc:CircleCollider, pc:PolyCollider):[CollisionResult, CollisionResult]|undefined
     {
-        let c1 = col1 as CircleCollider;
-        let c2 = col2 as CircleCollider;
+        const circCenter = cc.physics.position;
 
+        for (let ptIdx = 0; ptIdx < pc.numLines; ptIdx++)
+        {
+            const p1 = pc.points[ptIdx];
+            const p2 = pc.points[(ptIdx+1) % pc.numLines];
+
+            const left = Math.min(p1.x, p2.x);
+            const right = Math.max(p1.x, p2.x);
+
+            const bottom = Math.min(p1.y, p2.y);
+            const top = Math.max(p1.y, p2.y);
+
+            const deltaX = (p2.x - p1.x);
+            const deltaY = (p2.y - p1.y);
+
+            let xCross, yCross;
+            if (deltaY === 0)
+            {
+                xCross = circCenter.x;
+                yCross = p1.y;
+            }
+            else if (deltaX === 0)
+            {
+                xCross = p1.x;
+                yCross = circCenter.y;
+            }
+            else
+            {
+                // y = ax + b collider line
+                const a = deltaY / deltaX;
+                const b = ((p1.y + p2.y) - a * (p1.x + p2.x)) * .5;
+
+                // y = ap.x + bp perpendicular to line through circle center
+                const ap = -1/a;
+                const bp = circCenter.y
+                    + circCenter.x/a;
+
+                // crossing point of line and perpendicular
+                xCross = (bp - b) / (a - ap);
+                yCross = a * xCross + b;
+            }
+
+            this.tempPts[0].set(circCenter.x - xCross, circCenter.y - yCross);
+            const perpLen = this.tempPts[0].length();
+
+            this.tempPts[1].set(circCenter.x - p1.x, circCenter.y - p1.y);
+
+            if ((perpLen < cc.radius && (left < xCross && xCross < right) || (bottom < yCross && yCross < top)))
+            {
+                this.tempPts[0].normalize();
+                this.tempPts[0].scale(cc.radius - perpLen);
+                this.collisionResults[0].targetPos.copyFrom(this.tempPts[0]);
+                return this.collisionResults;
+            }
+            else if (this.tempPts[1].length() < cc.radius)
+            {
+                if (pc.numLines === 1)
+                {
+
+                }
+                else
+                {
+
+                }
+            }
+        }
+
+        return;
+    }
+
+
+    testCircVsCirc(c1:CircleCollider, c2:CircleCollider):[CollisionResult, CollisionResult]|undefined
+    {
         const deltaX = c1.physics.position.x - c2.physics.position.x;
         const deltaY = c1.physics.position.y - c2.physics.position.y;
 
@@ -175,11 +259,12 @@ export default class PhysicsEngine
 
         this.tempPts[0].normalize();
         this.tempPts[0].scale(penetration * (c1.radius / radiusSum));
-        this.tempPts[1].copyFrom(this.tempPts[0]);
 
+        this.tempPts[1].copyFrom(this.tempPts[0]);
         this.tempPts[1].scale(-1);
-        this.collisionResults[0].target.copyFrom(this.tempPts[0]);
-        this.collisionResults[1].target.copyFrom(this.tempPts[1]);
+
+        this.collisionResults[0].targetPos.copyFrom(this.tempPts[0]);
+        this.collisionResults[1].targetPos.copyFrom(this.tempPts[1]);
 
         return this.collisionResults;
     }
@@ -221,8 +306,6 @@ export default class PhysicsEngine
 
         const xTouchDist = c.radius + r.halfWidth;
         const yTouchDist = c.radius + r.halfHeight;
-
-
 
         if (q === 1 || q === 7)
         {
@@ -277,12 +360,12 @@ export default class PhysicsEngine
             return;
         }
 
-        this.collisionResults[0].target.set(0,0);
-        this.collisionResults[1].target.set(0,0);
+        this.collisionResults[0].targetPos.set(0,0);
+        this.collisionResults[1].targetPos.set(0,0);
 
         const circleIndex = c1.type === CircleCollider ? 0 : 1;
 
-        this.collisionResults[circleIndex].target.set(xMove, yMove);
+        this.collisionResults[circleIndex].targetPos.set(xMove, yMove);
 
         return this.collisionResults;
     }

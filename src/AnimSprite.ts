@@ -91,4 +91,6 @@ export default class AnimSprite
         this.sprite.parent.removeChild(this.sprite);
         app.game.removeUpdateCallback(this.updateData);
     }
+
+
 }

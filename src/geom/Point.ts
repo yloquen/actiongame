@@ -1,6 +1,6 @@
-export default class Point
+import IPointData = PIXI.IPointData;
+export default class Point implements IPointData
 {
-
     public x:number;
     public y:number;
 
@@ -12,7 +12,7 @@ export default class Point
 
     normalize():void
     {
-        if (Math.abs(this.x) > 0 && Math.abs(this.y) > 0)
+        if (Math.abs(this.x) > 0 || Math.abs(this.y) > 0)
         {
             const scaleFactor = 1 / this.length();
             this.x *= scaleFactor;

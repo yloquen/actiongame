@@ -8,7 +8,7 @@
  "margin":0,
  "name":"tiles",
  "spacing":0,
- "tilecount":41,
+ "tilecount":42,
  "tiledversion":"1.8.6",
  "tileheight":16,
  "tiles":[
@@ -257,8 +257,14 @@
          "image":"..\/..\/..\/design\/assets\/terrain\/wall\/empty.png",
          "imageheight":16,
          "imagewidth":16
+        }, 
+        {
+         "id":41,
+         "image":"..\/..\/..\/design\/assets\/terrain\/wall\/long_wall.png",
+         "imageheight":16,
+         "imagewidth":48
         }],
- "tilewidth":16,
+ "tilewidth":48,
  "type":"tileset",
  "version":"1.8"
 }

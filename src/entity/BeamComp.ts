@@ -36,19 +36,17 @@ export default class BeamComp extends BaseComp
         this.physics = this.entity.getComponent(PhysicsComp)!;
         this.charController = this.entity.getComponent(CharControlComp)!;
         this.cooldown = 0;
+        this.chargeTime = 0;
         this.addUpdateCallback(this.update.bind(this), E_UpdateStep.CREATION);
 
         this.waveBeam = new WaveBeam();
         app.viewManager.addChild(E_ViewLayer.CHARACTERS_2, this.waveBeam.sprite);
-
-        this.chargeTime = 0;
     }
 
 
     update(delta:number):void
     {
         this.aimVector = this.charController.getAimVector();
-
         this.cooldown -= delta;
 
         if (this.aimVector.length() > 0 && this.charController.isSkillActive(4))
@@ -56,21 +54,14 @@ export default class BeamComp extends BaseComp
             if (!this.waveBeam.sprite.visible)
             {
                 this.waveBeam.sprite.visible = true;
-                // app.sound.playSound("beam");
-                this.sound = app.sound.createSound("beam", .5);
-                this.sound.on('end', () => {
-                    this.sound.seek(1.6);
-                    this.sound.play();
-                });
-                this.sound.play();
+                this.sound = app.sound.playLoopedSound('beam', .5, 1.6);
             }
 
             this.chargeTime += delta;
             const progress = Math.min(1, this.chargeTime / this.waveBeamChargeTime);
             this.waveBeam.render(progress);
 
-            this.waveBeam.sprite.x = this.physics.position.x;
-            this.waveBeam.sprite.y = this.physics.position.y;
+            this.waveBeam.sprite.position.copyFrom(this.physics.position);
 
             if (this.cooldown <= 0)
             {
@@ -83,7 +74,6 @@ export default class BeamComp extends BaseComp
             }
 
             let targetAngle = Math.atan2(this.aimVector.y, this.aimVector.x);
-
             this.waveBeam.rotation = targetAngle;
 
             // if (targetAngle < 0)

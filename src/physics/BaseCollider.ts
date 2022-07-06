@@ -8,7 +8,7 @@ export type BoundsData =
 {
     collider:BaseCollider,
     isBeginning:boolean,
-    coord:number
+    x:number
 };
 
 export default class BaseCollider
@@ -18,8 +18,10 @@ export default class BaseCollider
     public physics:PhysicsComp;
 
     public collisions:BaseCollider[];
-    public collisionRatioOut:number;
-    public collisionRatioIn:number;
+    public ratioOut:number;
+    public ratioIn:number;
+
+    public isStatic:boolean;
 
     protected bounds:[BoundsData, BoundsData];
 
@@ -32,14 +34,17 @@ export default class BaseCollider
         this.type = data.type;
         this.physics = physics;
 
-        this.collisionRatioOut = data.collisionRatioOut;
-        this.collisionRatioIn = data.collisionRatioIn;
+        this.ratioOut = data.ratioOut;
+        this.ratioIn = data.ratioIn;
+
+        this.isStatic = Boolean(data.isStatic);
+
         this.collisions = [];
 
         this.bounds =
         [
-            {collider:this, isBeginning:true, coord:0},
-            {collider:this, isBeginning:false, coord:0}
+            {collider:this, isBeginning:true, x:0},
+            {collider:this, isBeginning:false, x:0}
         ];
 
         this.resetCollisions();
