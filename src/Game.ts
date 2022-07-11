@@ -57,7 +57,7 @@ export default class Game
                     collider:
                     {
                         type: CircleCollider,
-                        radius:app.model.scale*5,
+                        radius:app.model.scale*10,
                         ratioOut:1,
                         ratioIn:1
                     }
@@ -119,6 +119,8 @@ export default class Game
 
     update():void
     {
+        // Util.startBenchmark();
+
         const delta = app.pixi.ticker.deltaMS;
         this.updateCallbacks[E_UpdateStep.INPUT].forEach(c => { c(delta); });
         this.updateCallbacks[E_UpdateStep.POST_INPUT].forEach(c => { c(delta); });
@@ -129,18 +131,19 @@ export default class Game
         this.updateCallbacks[E_UpdateStep.CREATION].forEach(c => { c(delta); });
         this.updateCallbacks[E_UpdateStep.FINAL].forEach(c => { c(delta); });
 
-        this.runDiag();
+        // Util.endBenchmark();
+        // this.runDiag();
     }
 
 
     runDiag():void
     {
-        let n=0;
+        let n = 0;
         for (let step in E_UpdateStep)
         {
             if (!isNaN(Number(step)))
             {
-                n+=this.updateCallbacks[step].length;
+                n += this.updateCallbacks[step].length;
             }
         }
         // console.log("Update callbacks : " + n);

@@ -2,8 +2,24 @@
   "meta": {
     "version": "0.6.7"
   },
-  "savePath": "D:\\projects\\CardGameEngine\\static\\assets",
-  "images": [],
+  "savePath": "D:\\projects\\actiongame\\static\\assets",
+  "images": [
+    {
+      "name": "beam.png",
+      "path": "D:/projects/actiongame/design/assets/beam.png",
+      "folder": ""
+    },
+    {
+      "name": "fireball_f0.png",
+      "path": "D:/projects/actiongame/design/assets/fireball_f0.png",
+      "folder": ""
+    },
+    {
+      "name": "fireball_f1.png",
+      "path": "D:/projects/actiongame/design/assets/fireball_f1.png",
+      "folder": ""
+    }
+  ],
   "folders": [
     "D:/projects/actiongame/design/assets/bat",
     "D:/projects/actiongame/design/assets/digits",
@@ -19,11 +35,10 @@
     "tinify": false,
     "tinifyKey": "",
     "scale": 1,
-    "disableSmoothing": false,
     "filter": "none",
     "exporter": "pixi.js",
     "fileName": "pack-result",
-    "savePath": "D:\\projects\\CardGameEngine\\static\\assets",
+    "savePath": "D:\\projects\\actiongame\\static\\assets",
     "width": 2048,
     "height": 2048,
     "fixedSize": false,

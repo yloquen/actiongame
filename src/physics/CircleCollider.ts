@@ -7,22 +7,22 @@ export default class CircleCollider extends BaseCollider
 
 
     public radius:number;
+    private position:Point;
 
 
 
     constructor(data:any, physics:PhysicsComp)
     {
         super(data, physics);
-
         this.radius = data.radius;
+        this.position = physics.position;
     }
 
 
     updateBounds():void
     {
-        const pos = this.physics.position;
-        this.bounds[0].x= pos.x - this.radius;
-        this.bounds[1].x = pos.x + this.radius;
+        this.bounds[0].x= this.position.x - this.radius;
+        this.bounds[1].x = this.position.x + this.radius;
     }
 
 

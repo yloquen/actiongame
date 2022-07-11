@@ -24,7 +24,7 @@ export default class EnemyManager
     init():void
     {
         // app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.FINAL);
-        // for (let i = 0; i < 100; i++)
+        // for (let i = 0; i < 1000; i++)
         // {
         //     this.createEnemy();
         // }
@@ -57,7 +57,7 @@ export default class EnemyManager
                             collider:
                             {
                                 type:CircleCollider,
-                                radius:app.model.scale*4,
+                                radius:app.model.scale*5,
                                 receiveCollisions:true,
                                 ratioOut:1,
                                 ratioIn:1

@@ -9,4 +9,8 @@ export default class MathUtil
         return v<0 ? -1 : 1;
     }
 
+    static radToDeg(angleRad:number):number
+    {
+        return angleRad * 180/Math.PI;
+    }
 }

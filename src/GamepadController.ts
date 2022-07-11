@@ -49,7 +49,7 @@ export default class GamepadController
         this.velocity.x = gamepad.axes[0];
         this.velocity.y = gamepad.axes[1];
         this.processVector(this.velocity);
-        this.velocity.scale(.4);
+        this.velocity.scale(1);
 
         this.aimVector.x = gamepad.axes[2];
         this.aimVector.y = gamepad.axes[3];

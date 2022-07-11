@@ -133,10 +133,16 @@ export default class MapGenerator
                         type: PolyCollider,
                         isStatic: true,
                         points:[
-                            {x:xPos - hw, y:yPos - hh},
-                            {x:xPos + hw, y:yPos - hh},
-                            {x:xPos + hw, y:yPos + hh},
-                            {x:xPos - hw, y:yPos + hh}
+                            // {x:xPos - hw, y:yPos - hh},
+                            // {x:xPos + hw, y:yPos - hh},
+                            // {x:xPos + hw, y:yPos + hh},
+                            // {x:xPos - hw, y:yPos + hh}
+                            {x:xPos, y:yPos - 400},
+                            {x:xPos + 400, y:yPos},
+                            {x:xPos + 400, y:yPos + 400},
+                            {x:xPos - 400, y:yPos + 400},
+                            {x:xPos - 400, y:yPos}
+                            //{x:xPos - hw, y:yPos - hh}
                         ],
                         // type: RectCollider,
                         // width:app.model.scale * 18,

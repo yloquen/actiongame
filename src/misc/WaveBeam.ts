@@ -44,7 +44,7 @@ export default class WaveBeam
         while(x < 660 * progress)
         {
             const scale = app.model.scale * .5 * (1.5 + (x) / 660);
-            const jitter = scale * .8;
+            const jitter = 0;//scale * .8;
             this.sourceSprite.scale.set(scale);
             this.sourceSprite.x = x - jitter + Math.random() * jitter * 2;
             this.sourceSprite.alpha = progress * (applyDamage ? .6 : .4);
@@ -64,7 +64,7 @@ export default class WaveBeam
 
             const yPrime = amplitude * .03 * Math.cos(x * .03 * progress);
 
-            const step = 10 / Math.sqrt(1 + yPrime * yPrime);
+            const step = 14 / Math.sqrt(1 + yPrime * yPrime);
             x+=step;
         }
     }

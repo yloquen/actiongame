@@ -81,4 +81,12 @@ export default class Point implements IPointData
         this.y = y;
     }
 
+
+    dotProduct(p:Point):number
+    {
+        return this.x * p.x + this.y * p.y;
+    }
+
+
+
 }

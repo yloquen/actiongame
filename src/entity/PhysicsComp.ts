@@ -49,7 +49,8 @@ export default class PhysicsComp extends BaseComp
         {
             const g = new PIXI.Graphics();
             g.beginFill(0xff00ff,0);
-            g.lineStyle(5, 0xff00ff);
+            g.lineTextureStyle({ width:app.model.scale, color:0xff00ff,
+                cap:PIXI.LINE_CAP.BUTT, join:PIXI.LINE_JOIN.ROUND, alignment:0 });
             g.scale.set(1/app.model.scale);
             if (colliderData.type === CircleCollider)
             {

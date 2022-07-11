@@ -25,7 +25,7 @@ export default class BaseCollider
 
     protected bounds:[BoundsData, BoundsData];
 
-    protected collisionResult:CollisionResult;
+    protected collisionResult:Point;
     protected numCollisions:number;
 
 
@@ -65,36 +65,34 @@ export default class BaseCollider
 
     resetCollisions():void
     {
-        // this.numCollisions = 0;
-        // this.collisionResult = new Point(0,0);
+        this.numCollisions = 0;
+        this.collisionResult = new Point(0,0);
     }
 
 
-    addCollisionResult(c:CollisionResult)
+    addCollisionResult(moveVec:Point, c:BaseCollider):void
     {
-        // this.numCollisions++;
-        // if (this.numCollisions === 1)
-        // {
-        //     this.collisionResult.copyFrom(p);
-        // }
-        // else
-        // {
-        //     const oldWeight = (this.numCollisions-1)/this.numCollisions;
-        //     const x = this.collisionResult.x * oldWeight + p.x / this.numCollisions;
-        //     const y = this.collisionResult.y * oldWeight + p.y / this.numCollisions;
-        //     this.collisionResult.set(x,y);
-        // }
+        this.numCollisions++;
+        moveVec.scale(c.ratioOut * this.ratioIn);
+        if (this.numCollisions === 1)
+        {
+            this.collisionResult.copyFrom(moveVec);
+        }
+        else
+        {
+            const oldWeight = (this.numCollisions-1) / this.numCollisions;
+            const x = this.collisionResult.x * oldWeight + moveVec.x / this.numCollisions;
+            const y = this.collisionResult.y * oldWeight + moveVec.y / this.numCollisions;
+            this.collisionResult.set(x,y);
+        }
     }
 
     applyCollision()
     {
         if (this.numCollisions > 0)
         {
-            /*
-            console.log(this.physics.position.toString() + " " + this.collisionResult.toString());
             this.physics.position.add(this.collisionResult);
             this.resetCollisions();
-            */
         }
 
     }

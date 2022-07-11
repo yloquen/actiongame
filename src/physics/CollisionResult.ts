@@ -22,4 +22,5 @@ export default class CollisionResult
         this.targetPos.set(0,0);
     }
 
+
 }
