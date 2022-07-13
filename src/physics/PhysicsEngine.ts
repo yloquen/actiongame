@@ -109,7 +109,7 @@ export default class PhysicsEngine
 
         let activeIdx = 0;
 
-        //console.log("\n======");
+        console.log("\n======");
         for (let bIdx = 0; bIdx < this.bounds.length ; bIdx++)
         {
             const boundsData = this.bounds[bIdx];
@@ -117,9 +117,6 @@ export default class PhysicsEngine
             const uid = c1.physics.entity.uid;
             if (boundsData.isBeginning)
             {
-
-                c1.resetCollisions();
-
                 const uid = c1.physics.entity.uid;
                 this.activeBounds[uid] = boundsData;
 
@@ -127,7 +124,11 @@ export default class PhysicsEngine
                 for(let uid in this.activeBounds)
                 {
                     const c2 = this.activeBounds[uid].collider;
-                    const collisionResult = this.test(c1, c2);
+                    if (c1 !== c2)
+                    {
+                        //console.log("Testing " + c1.physics.entity.uid + " : " + c2.physics.entity.uid);
+                        this.test(c1, c2);
+                    }
                 }
             }
             else
@@ -136,7 +137,7 @@ export default class PhysicsEngine
             }
         }
 
-        // this.colliders.forEach(c => c.applyCollision());
+        this.colliders.forEach(c => c.applyCollision());
 
         // Util.endBenchmark();
         // console.log(numCollisions + "/" + numTests);
@@ -157,6 +158,10 @@ export default class PhysicsEngine
         {
             this.testCircVsPoly(c2 as CircleCollider, c1 as PolyCollider);
         }
+        else if (c1.type === PolyCollider && c2.type === PolyCollider)
+        {
+            this.testPolyVsPoly(c1 as PolyCollider, c2 as PolyCollider);
+        }
     }
 
 
@@ -172,12 +177,12 @@ export default class PhysicsEngine
         for (let ptIdx = 0; ptIdx < pc.numLines; ptIdx++)
         {
             const lineVector = pc.lineVectors[ptIdx];
+
             const centerVec = this.tempPts[0];
-
-            const centerLen = centerVec.length();
-
             centerVec.copyFrom(circCenter);
             centerVec.sub(pc.points[ptIdx]);
+
+            const centerLen = centerVec.length();
 
             const lineLen = lineVector.length();
             const cosAlpha = lineVector.dotProduct(centerVec) / (lineLen * centerLen);
@@ -190,6 +195,7 @@ export default class PhysicsEngine
             }
 
             const crossProduct = (lineVector.x * centerVec.y - lineVector.y * centerVec.x) / lineLen;
+
             if (crossProduct < 0 )
             {
                 if (!hasNegative)
@@ -230,7 +236,7 @@ export default class PhysicsEngine
             pc.addCollisionResult(this.tempPts[0], cc);
         }
 
-        return ;
+        return;
     }
 
 
@@ -261,10 +267,42 @@ export default class PhysicsEngine
         this.tempPts[1].copyFrom(this.tempPts[0]);
         this.tempPts[1].scale(-1);
 
-        this.collisionResults[0].targetPos.copyFrom(this.tempPts[0]);
-        this.collisionResults[1].targetPos.copyFrom(this.tempPts[1]);
+        c1.addCollisionResult(this.tempPts[0], c2);
+        c2.addCollisionResult(this.tempPts[1], c1);
+    }
 
-        return this.collisionResults;
+
+    testPolyVsPoly(c1:PolyCollider, c2:PolyCollider):[CollisionResult, CollisionResult]|undefined
+    {
+
+
+        for (let ptIdx1 = 0; ptIdx1 < c1.points.length; ptIdx1++)
+        {
+            const p1 = c1.points[ptIdx1];
+            const lv1 = c1.lineVectors[ptIdx1];
+
+            for (let ptIdx2 = 0; ptIdx2 < c2.numLines; ptIdx2++)
+            {
+                const p2 = c2.points[ptIdx2];
+                const lv2 = c2.lineVectors[ptIdx2];
+
+                const d1 = -lv1.x/lv1.y;
+                const d2 = -lv2.x/lv2.y;
+
+                const t1 = (p2.x - p1.x + d2 * (p2.y - p1.y)) / (lv1.x + d2 * lv1.y);
+                const t2 = (p1.x - p2.x + d1 * (p1.y - p2.y)) / (lv2.x + d1 * lv2.y);
+
+                if ((t1 > 0 && t1 < 1) && (t2 > 0 && t2 < 1))
+                {
+                    const crossX = p1.x + t1 * lv1.x;
+                    const crossY = p1.y + t1 * lv1.y;
+                    console.log(crossX + " " + crossY);
+                }
+            }
+        }
+
+
+        return;
     }
 
 

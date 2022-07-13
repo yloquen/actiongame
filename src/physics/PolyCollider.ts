@@ -5,6 +5,7 @@ import BaseCollider, {BoundsData} from "./BaseCollider";
 export default class PolyCollider extends BaseCollider
 {
     public points:Point[];
+    public pointsLocal:Point[];
     public numLines:number;
     public lineVectors:Point[];
     public normals:Point[];
@@ -15,6 +16,7 @@ export default class PolyCollider extends BaseCollider
         super(data, physics);
 
         this.points = [];
+        this.pointsLocal = [];
         this.lineVectors = [];
         this.normals = [];
 
@@ -22,13 +24,14 @@ export default class PolyCollider extends BaseCollider
         for (let ptIdx = 0; ptIdx < numPoints; ptIdx++)
         {
             const pointData = data.points[ptIdx];
-            this.points.push(new Point(pointData.x, pointData.y));
+            this.pointsLocal.push(new Point(pointData.x, pointData.y));
+            this.points.push(new Point(0,0));
         }
 
         for (let ptIdx = 0; ptIdx < numPoints; ptIdx++)
         {
-            const p1 = this.points[ptIdx];
-            const p2 = this.points[(ptIdx+1) % numPoints];
+            const p1 = this.pointsLocal[ptIdx];
+            const p2 = this.pointsLocal[(ptIdx+1) % numPoints];
             const line = new Point(p2.x - p1.x, p2.y - p1.y);
             this.lineVectors.push(line);
             const normal = new Point(line.y, -line.x);
@@ -47,8 +50,10 @@ export default class PolyCollider extends BaseCollider
         const pos = this.physics.position;
         this.bounds[0].x = Number.POSITIVE_INFINITY;
         this.bounds[1].x = Number.NEGATIVE_INFINITY;
-        this.points.forEach(p =>
+        this.points.forEach((p,idx) =>
         {
+            p.copyFrom(this.pointsLocal[idx]);
+            p.add(pos);
             this.bounds[0].x = Math.min(this.bounds[0].x, p.x);
             this.bounds[1].x = Math.max(this.bounds[1].x, p.x);
         });

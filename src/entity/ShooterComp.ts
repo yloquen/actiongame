@@ -64,7 +64,7 @@ export default class ShooterComp extends BaseComp
                         type:CircleCollider,
                         radius:app.model.scale*3,
                         ratioOut:.25,
-                        ratioIn:0
+                        ratioIn:1
                     }
                 },
                 {

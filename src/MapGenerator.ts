@@ -137,18 +137,19 @@ export default class MapGenerator
                             // {x:xPos + hw, y:yPos - hh},
                             // {x:xPos + hw, y:yPos + hh},
                             // {x:xPos - hw, y:yPos + hh}
-                            {x:xPos, y:yPos - 400},
-                            {x:xPos + 400, y:yPos},
-                            {x:xPos + 400, y:yPos + 400},
-                            {x:xPos - 400, y:yPos + 400},
-                            {x:xPos - 400, y:yPos}
+                            {x:0, y:-100},
+                            {x:100, y:0},
+                            {x:0, y:100},
+                            {x:-100, y:0}
+                            // {x:-100, y:0}
                             //{x:xPos - hw, y:yPos - hh}
                         ],
                         // type: RectCollider,
                         // width:app.model.scale * 18,
                         // height:app.model.scale * 18,
                         ratioOut:1,
-                        ratioIn:0
+                        ratioIn:0,
+                        mass:1000,
                     }
                 });
 

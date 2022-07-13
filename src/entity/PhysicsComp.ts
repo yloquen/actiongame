@@ -23,15 +23,13 @@ export default class PhysicsComp extends BaseComp
     public collider:BaseCollider;
     public position:Point;
     public velocity:Point;
-
-    private mass:number;
-
+    public mass:number;
 
     constructor(e:Entity, data:any)
     {
         super(e,data);
         this.velocity = this.data.velocity ? this.data.velocity.clone() : new Point(0,0);
-        this.mass = 10;
+        this.mass = data.mass ? data.mass : 1;
         this.position = new Point(this.data.pos.x, this.data.pos.y);
     }
 
@@ -66,11 +64,11 @@ export default class PhysicsComp extends BaseComp
                     const p = points[ptIdx%numPoints];
                     if (ptIdx === 0)
                     {
-                        g.moveTo(p.x - this.position.x, p.y - this.position.y);
+                        g.moveTo(p.x, p.y);
                     }
                     else
                     {
-                        g.lineTo(p.x - this.position.x, p.y - this.position.y);
+                        g.lineTo(p.x, p.y);
                     }
                 }
 

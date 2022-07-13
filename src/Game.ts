@@ -17,6 +17,7 @@ import RectCollider from "./physics/RectCollider";
 import BeamComp from "./entity/BeamComp";
 import GrowingProjectileComp from "./entity/GrowingProjectileComp";
 import GrowingProjectileWeaponComp from "./entity/GrowingProjectileWeaponComp";
+import PolyCollider from "./physics/PolyCollider";
 
 export type UpdateData =
 {
@@ -53,13 +54,30 @@ export default class Game
             [
                 {
                     compType:PhysicsComp,
-                    pos:{x:1000, y:600},
+                    pos:{x:0, y:0},
+                    // collider:
+                    // {
+                    //     type: CircleCollider,
+                    //     radius:app.model.scale*10,
+                    //     ratioOut:1,
+                    //     ratioIn:1
+                    // }
                     collider:
                     {
-                        type: CircleCollider,
-                        radius:app.model.scale*10,
+                        type: PolyCollider,
+                        points:[
+
+                            {x:0, y:-80},
+                            {x:110, y:10},
+                            {x:0, y:70},
+                            {x:-90, y:0}
+                        ],
+                        // type: RectCollider,
+                        // width:app.model.scale * 18,
+                        // height:app.model.scale * 18,
                         ratioOut:1,
-                        ratioIn:1
+                        ratioIn:0,
+                        mass:1000,
                     }
                 },
                 {

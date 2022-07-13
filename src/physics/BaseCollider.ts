@@ -72,7 +72,7 @@ export default class BaseCollider
 
     addCollisionResult(moveVec:Point, c:BaseCollider):void
     {
-        this.numCollisions++;
+        this.numCollisions += c.physics.mass;
         moveVec.scale(c.ratioOut * this.ratioIn);
         if (this.numCollisions === 1)
         {
@@ -80,7 +80,7 @@ export default class BaseCollider
         }
         else
         {
-            const oldWeight = (this.numCollisions-1) / this.numCollisions;
+            const oldWeight = (this.numCollisions-c.physics.mass) / this.numCollisions;
             const x = this.collisionResult.x * oldWeight + moveVec.x / this.numCollisions;
             const y = this.collisionResult.y * oldWeight + moveVec.y / this.numCollisions;
             this.collisionResult.set(x,y);
