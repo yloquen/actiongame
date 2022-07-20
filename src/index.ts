@@ -11,6 +11,7 @@ import MapGenerator from "./MapGenerator";
 import Model from "./Model";
 import CameraController from "./CameraController";
 import {gsap} from "gsap";
+import Pool from "./Pool";
 
 
 
@@ -31,7 +32,8 @@ export const app:any =
     sound:new SoundController(),
     gamepadController:new GamepadController(),
     mapGenerator:new MapGenerator(),
-    camera:new CameraController()
+    camera:new CameraController(),
+    pool:new Pool()
 };
 
 document.body.appendChild(app.pixi.view);
@@ -68,6 +70,7 @@ function start():void
     app.sound.init();
     app.mapGenerator.init();
     app.camera.init();
+    app.pool.init();
 
 
 }

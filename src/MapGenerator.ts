@@ -131,25 +131,27 @@ export default class MapGenerator
                     collider:
                     {
                         type: PolyCollider,
-                        isStatic: true,
+                        //isStatic: true,
                         points:[
                             // {x:xPos - hw, y:yPos - hh},
                             // {x:xPos + hw, y:yPos - hh},
                             // {x:xPos + hw, y:yPos + hh},
                             // {x:xPos - hw, y:yPos + hh}
+                            // {x:10, y:-100},
+                            // {x:130, y:30},
+                            // {x:20, y:100},
+                            // {x:-120, y:10}
                             {x:0, y:-100},
                             {x:100, y:0},
                             {x:0, y:100},
                             {x:-100, y:0}
-                            // {x:-100, y:0}
-                            //{x:xPos - hw, y:yPos - hh}
                         ],
                         // type: RectCollider,
                         // width:app.model.scale * 18,
                         // height:app.model.scale * 18,
                         ratioOut:1,
-                        ratioIn:0,
-                        mass:1000,
+                        ratioIn:1,
+                        mass:1000
                     }
                 });
 

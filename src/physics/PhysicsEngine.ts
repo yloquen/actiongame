@@ -1,22 +1,20 @@
 import BaseCollider, {BoundsData} from "./BaseCollider";
 import Point from "../geom/Point";
 import CircleCollider from "./CircleCollider";
-import RectCollider from "./RectCollider";
-import MathUtil from "../util/MathUtil";
 import CollisionResult from "./CollisionResult";
 import PolyCollider from "./PolyCollider";
-import Util from "../util/Util";
-import has = Reflect.has;
+import MathUtil from "../util/MathUtil";
+
 
 export default class PhysicsEngine
 {
     public debug:boolean = true;
 
     private readonly colliders:BaseCollider[];
-    private activeBounds:Record<number, BoundsData>;
+    private readonly activeBounds:Record<number, BoundsData>;
     private readonly bounds:BoundsData[];
     private readonly collisionResults:[CollisionResult, CollisionResult];
-    private readonly tempPts:[Point, Point];
+    private readonly tempPts:Point[];
 
 
     constructor()
@@ -26,7 +24,7 @@ export default class PhysicsEngine
         this.activeBounds = {};
 
         this.collisionResults = [new CollisionResult(), new CollisionResult()];
-        this.tempPts = [new Point(0,0), new Point(0,0)];
+        this.tempPts = [new Point(0,0), new Point(0,0), new Point(0,0)];
     }
 
 
@@ -61,7 +59,7 @@ export default class PhysicsEngine
 
 
     // each vs each (slow), keep for testing
-    checkCollisions2():void
+    checkCollisions():void
     {
         this.colliders.forEach(c =>
         {
@@ -72,6 +70,7 @@ export default class PhysicsEngine
             c.collisions.length = 0;
         });
         // Util.startBenchmark();
+        console.log("\n=======");
         let numTests = 0;
         let numCollisions = 0;
         for (let c1idx = 0; c1idx < this.colliders.length - 1; c1idx++)
@@ -86,10 +85,12 @@ export default class PhysicsEngine
         }
         // Util.endBenchmark();
         // console.log(numCollisions + "/" + numTests);
+
+        this.colliders.forEach(c => c.applyCollision());
     }
 
 
-    checkCollisions():void
+    checkCollisions2():void
     {
         // Util.startBenchmark();
         // console.log(">" + this.colliders.length);
@@ -146,6 +147,11 @@ export default class PhysicsEngine
 
     test(c1:BaseCollider, c2:BaseCollider):void
     {
+        if (c1.isStatic && c2.isStatic)
+        {
+            return;
+        }
+
         if (c1.type === CircleCollider && c2.type === CircleCollider)
         {
             this.testCircVsCirc(c1 as CircleCollider, c2 as CircleCollider);
@@ -174,7 +180,7 @@ export default class PhysicsEngine
         let moveIdx = -1;
         let hasNegative = false;
 
-        for (let ptIdx = 0; ptIdx < pc.numLines; ptIdx++)
+        for (let ptIdx = 0; ptIdx < pc.numPoints; ptIdx++)
         {
             const lineVector = pc.lineVectors[ptIdx];
 
@@ -272,37 +278,59 @@ export default class PhysicsEngine
     }
 
 
-    testPolyVsPoly(c1:PolyCollider, c2:PolyCollider):[CollisionResult, CollisionResult]|undefined
+    testPolyVsPoly(c1:PolyCollider, c2:PolyCollider):void
     {
+        let collision = true;
 
+        let move = Number.POSITIVE_INFINITY;
+        let moveVec:Point|undefined;
+        let index = -1;
+        let collider:PolyCollider|undefined;
 
-        for (let ptIdx1 = 0; ptIdx1 < c1.points.length; ptIdx1++)
+        [[c1,c2],[c2,c1]].forEach((c:PolyCollider[]) =>
         {
-            const p1 = c1.points[ptIdx1];
-            const lv1 = c1.lineVectors[ptIdx1];
-
-            for (let ptIdx2 = 0; ptIdx2 < c2.numLines; ptIdx2++)
+            for (let oIdx = 0; oIdx < c[0].points.length; oIdx++)
             {
-                const p2 = c2.points[ptIdx2];
-                const lv2 = c2.lineVectors[ptIdx2];
+                const p = c[0].points[oIdx];
+                const o = c[0].orthogonals[oIdx];
+                const m1 = c[0].findMinMaxProjection(c[1], p, o);
+                const m2 = c[0].projMinMax[oIdx];
 
-                const d1 = -lv1.x/lv1.y;
-                const d2 = -lv2.x/lv2.y;
+                const mv1 = m1[1] - m2[0];
+                const mv2 = m2[1] - m1[0];
 
-                const t1 = (p2.x - p1.x + d2 * (p2.y - p1.y)) / (lv1.x + d2 * lv1.y);
-                const t2 = (p1.x - p2.x + d1 * (p1.y - p2.y)) / (lv2.x + d1 * lv2.y);
-
-                if ((t1 > 0 && t1 < 1) && (t2 > 0 && t2 < 1))
+                let v = Math.min(mv1, mv2);
+                if (v < 0)
                 {
-                    const crossX = p1.x + t1 * lv1.x;
-                    const crossY = p1.y + t1 * lv1.y;
-                    console.log(crossX + " " + crossY);
+                    collision = false;
+                    break;
+                }
+                else if (v < move)
+                {
+                    index = oIdx;
+                    move = v;
+                    moveVec = o;
+                    collider = c[0];
                 }
             }
+        });
+
+        if (collision)
+        {
+            this.tempPts[0].copyFrom(moveVec!).scale(-move * .5);
+            c1.addCollisionResult(this.tempPts[0], c2);
+            this.tempPts[0].scale(-1);
+            c2.addCollisionResult(this.tempPts[0], c1);
+            console.log(collider?.physics.entity.uid + "." + index + " " + move);
+            console.log(moveVec);
+            console.log(this.tempPts[0]);
         }
+    }
 
 
-        return;
+    test2(c:BaseCollider[]):void
+    {
+
     }
 
 

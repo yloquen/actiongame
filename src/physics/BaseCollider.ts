@@ -73,7 +73,9 @@ export default class BaseCollider
     addCollisionResult(moveVec:Point, c:BaseCollider):void
     {
         this.numCollisions += c.physics.mass;
+
         moveVec.scale(c.ratioOut * this.ratioIn);
+
         if (this.numCollisions === 1)
         {
             this.collisionResult.copyFrom(moveVec);

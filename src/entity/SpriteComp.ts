@@ -28,9 +28,21 @@ export default class SpriteComp extends BaseComp
 
     init():void
     {
-        const p = this.entity.getComponent(PhysicsComp)!;
-        this.sprite.x = p.position.x;
-        this.sprite.y = p.position.y;
+        this.physics = this.entity.getComponent(PhysicsComp)!;
+        this.sprite.x = this.physics.position.x;
+        this.sprite.y = this.physics.position.y;
+
+        if (!this.physics.collider?.isStatic)
+        {
+            this.addUpdateCallback(this.update.bind(this), E_UpdateStep.MOVEMENT);
+        }
+    }
+
+
+    update():void
+    {
+        this.sprite.x = this.physics.position.x;
+        this.sprite.y = this.physics.position.y;
     }
 
 

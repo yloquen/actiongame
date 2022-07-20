@@ -4,13 +4,18 @@ export default class Point implements IPointData
     public x:number;
     public y:number;
 
-    constructor(x:number, y:number)
+    static max(p1:Point, p2:Point):Point
+    {
+        return p1.length() > p2.length() ? p1 : p2;
+    }
+
+    constructor(x:number=0, y:number=0)
     {
         this.x = x;
         this.y = y;
     }
 
-    normalize():void
+    normalize():Point
     {
         if (Math.abs(this.x) > 0 || Math.abs(this.y) > 0)
         {
@@ -18,6 +23,7 @@ export default class Point implements IPointData
             this.x *= scaleFactor;
             this.y *= scaleFactor;
         }
+        return this;
     }
 
     toString():string
@@ -25,10 +31,11 @@ export default class Point implements IPointData
         return "x:" + this.x.toFixed(2) + " y:" + this.y.toFixed(2);
     }
 
-    scale(scale:number):void
+    scale(scale:number):Point
     {
         this.x *= scale;
         this.y *= scale;
+        return this;
     }
 
     length():number
@@ -41,16 +48,18 @@ export default class Point implements IPointData
         return new Point(this.x, this.y);
     }
 
-    add(p:Point):void
+    add(p:Point):Point
     {
         this.x += p.x;
         this.y += p.y;
+        return this;
     }
 
-    sub(p:Point):void
+    sub(p:Point):Point
     {
         this.x -= p.x;
         this.y -= p.y;
+        return this;
     }
 
     toPolar():void
@@ -69,16 +78,18 @@ export default class Point implements IPointData
         this.y = x * Math.sin(y);
     }
 
-    copyFrom(p:Point):void
+    copyFrom(p:Point):Point
     {
         this.x = p.x;
         this.y = p.y;
+        return this;
     }
 
-    set(x:number, y:number)
+    set(x:number, y:number):Point
     {
         this.x = x;
         this.y = y;
+        return this;
     }
 
 
@@ -87,6 +98,11 @@ export default class Point implements IPointData
         return this.x * p.x + this.y * p.y;
     }
 
+
+    projectionRatio(p:Point)
+    {
+        return (this.x * p.x + this.y * p.y) / (this.x * this.x + this.y * this.y);
+    }
 
 
 }
