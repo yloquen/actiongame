@@ -59,7 +59,7 @@ export default class PhysicsEngine
 
 
     // each vs each (slow), keep for testing
-    checkCollisions():void
+    checkCollisions2():void
     {
         this.colliders.forEach(c =>
         {
@@ -70,7 +70,7 @@ export default class PhysicsEngine
             c.collisions.length = 0;
         });
         // Util.startBenchmark();
-        console.log("\n=======");
+        //console.log("\n=======");
         let numTests = 0;
         let numCollisions = 0;
         for (let c1idx = 0; c1idx < this.colliders.length - 1; c1idx++)
@@ -90,7 +90,7 @@ export default class PhysicsEngine
     }
 
 
-    checkCollisions2():void
+    checkCollisions():void
     {
         // Util.startBenchmark();
         // console.log(">" + this.colliders.length);
@@ -110,7 +110,7 @@ export default class PhysicsEngine
 
         let activeIdx = 0;
 
-        console.log("\n======");
+        //console.log("\n======");
         for (let bIdx = 0; bIdx < this.bounds.length ; bIdx++)
         {
             const boundsData = this.bounds[bIdx];
@@ -282,12 +282,15 @@ export default class PhysicsEngine
     {
         let collision = true;
 
-        let move = Number.POSITIVE_INFINITY;
-        let moveVec:Point|undefined;
-        let index = -1;
+        // let move = Number.POSITIVE_INFINITY;
+        const minMoveVec:Point = this.tempPts[0];
+        minMoveVec.set(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY);
+        const currMoveVec:Point = this.tempPts[1];
+        let sideIndex = -1;
         let collider:PolyCollider|undefined;
+        let init = false;
 
-        [[c1,c2],[c2,c1]].forEach((c:PolyCollider[]) =>
+        [[c1,c2],[c2,c1]].forEach((c:PolyCollider[], index:number) =>
         {
             for (let oIdx = 0; oIdx < c[0].points.length; oIdx++)
             {
@@ -299,17 +302,21 @@ export default class PhysicsEngine
                 const mv1 = m1[1] - m2[0];
                 const mv2 = m2[1] - m1[0];
 
-                let v = Math.min(mv1, mv2);
-                if (v < 0)
+                const relMove = Math.min(mv1, mv2);
+                currMoveVec.copyFrom(o).scale(relMove);
+
+                if (relMove < 0)
                 {
                     collision = false;
                     break;
                 }
-                else if (v < move)
+                else if (currMoveVec.length() < minMoveVec.length())
                 {
-                    index = oIdx;
-                    move = v;
-                    moveVec = o;
+                    let sign = relMove === mv1 ? 1 : -1;
+                    sign *= (index === 0 ? 1 : -1);
+                    sideIndex = oIdx;
+                    minMoveVec.copyFrom(currMoveVec).scale(sign);
+                    // console.log("." + move * minMoveVec.length() + " oIdx " + oIdx);
                     collider = c[0];
                 }
             }
@@ -317,21 +324,16 @@ export default class PhysicsEngine
 
         if (collision)
         {
-            this.tempPts[0].copyFrom(moveVec!).scale(-move * .5);
-            c1.addCollisionResult(this.tempPts[0], c2);
-            this.tempPts[0].scale(-1);
-            c2.addCollisionResult(this.tempPts[0], c1);
-            console.log(collider?.physics.entity.uid + "." + index + " " + move);
-            console.log(moveVec);
-            console.log(this.tempPts[0]);
+            //console.log(collider?.physics.entity.uid + "." + sideIndex + " " +  minMoveVec);
+            minMoveVec.scale(.5);
+            c1.addCollisionResult(minMoveVec, c2);
+            //console.log(c1.physics.entity.uid + " move: " + minMoveVec);
+            minMoveVec.scale(-1);
+            c2.addCollisionResult(minMoveVec, c1);
+            ///console.log(c2.physics.entity.uid + " move: " + minMoveVec);
         }
     }
 
-
-    test2(c:BaseCollider[]):void
-    {
-
-    }
 
 
 }

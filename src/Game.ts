@@ -67,17 +67,17 @@ export default class Game
                         type: PolyCollider,
                         points:[
 
-                            {x:0, y:-80},
-                            {x:80, y:0},
-                            {x:0, y:80},
-                            {x:-80, y:0}
+                            {x:0, y:-85},
+                            {x:50, y:0},
+                            //{x:0, y:95},
+                            {x:-50, y:0}
                         ],
                         // type: RectCollider,
                         // width:app.model.scale * 18,
                         // height:app.model.scale * 18,
                         ratioOut:1,
                         ratioIn:1,
-                        mass:1000,
+                        mass:1,
                     }
                 },
                 {

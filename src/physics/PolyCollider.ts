@@ -13,6 +13,7 @@ export default class PolyCollider extends BaseCollider
     public center:Point;
     public centerLocal:Point;
     public projMinMax:[number, number][];
+    private tempPoint:Point;
 
 
     constructor(data:any, physics:PhysicsComp)
@@ -27,6 +28,7 @@ export default class PolyCollider extends BaseCollider
         this.center = new Point();
         this.centerLocal = new Point();
         this.projMinMax = [];
+        this.tempPoint = new Point();
 
         const numPoints = data.points.length;
         this.numPoints = numPoints;
@@ -71,12 +73,10 @@ export default class PolyCollider extends BaseCollider
     {
         const res:[number, number] = [Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY];
 
-        const pTemp = new Point();
-
         for (let ptIdx = 0; ptIdx < c.numPoints; ptIdx++)
         {
-            pTemp.copyFrom(c.points[ptIdx]).sub(p);
-            const r = o.projectionRatio(pTemp);
+            this.tempPoint.copyFrom(c.points[ptIdx]).sub(p);
+            const r = o.projectionRatio(this.tempPoint);
             res[0] = Math.min(r, res[0]);
             res[1] = Math.max(r, res[1]);
         }

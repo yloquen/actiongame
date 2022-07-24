@@ -8,6 +8,7 @@ import E_UpdateStep from "./const/E_UpdateStep";
 import BaseEnemyComp from "./entity/BaseEnemyComp";
 import EnemyMoveComp from "./entity/EnemyMoveComp";
 import CircleCollider from "./physics/CircleCollider";
+import PolyCollider from "./physics/PolyCollider";
 
 export default class EnemyManager
 {
@@ -24,7 +25,7 @@ export default class EnemyManager
     init():void
     {
         // app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.FINAL);
-        // for (let i = 0; i < 1000; i++)
+        // for (let i = 0; i < 100; i++)
         // {
         //     this.createEnemy();
         // }
@@ -54,14 +55,33 @@ export default class EnemyManager
                         {
                             compType:PhysicsComp,
                             pos:pos,
-                            collider:
+/*                            collider:
                             {
                                 type:CircleCollider,
                                 radius:app.model.scale*5,
                                 receiveCollisions:true,
                                 ratioOut:1,
                                 ratioIn:1
-                            }
+                            }*/
+
+                            collider:
+                                {
+                                    type: PolyCollider,
+                                    //isStatic: true,
+                                    points:[
+                                        {x:0, y:-120},
+                                        {x:90, y:0},
+                                        {x:0, y:80},
+                                        {x:-70, y:0},
+                                        {x:-50, y:-80}
+                                    ],
+                                    // type: RectCollider,
+                                    // width:app.model.scale * 18,
+                                    // height:app.model.scale * 18,
+                                    ratioOut:1,
+                                    ratioIn:1,
+                                    mass:1
+                                }
                         },
                         {
                             compType:AnimSpriteComp,

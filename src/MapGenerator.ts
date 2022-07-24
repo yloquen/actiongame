@@ -141,17 +141,18 @@ export default class MapGenerator
                             // {x:130, y:30},
                             // {x:20, y:100},
                             // {x:-120, y:10}
-                            {x:0, y:-100},
-                            {x:100, y:0},
-                            {x:0, y:100},
-                            {x:-100, y:0}
+                            {x:0, y:-120},
+                            {x:90, y:0},
+                            {x:0, y:80},
+                            {x:-70, y:0},
+                            {x:-50, y:-80}
                         ],
                         // type: RectCollider,
                         // width:app.model.scale * 18,
                         // height:app.model.scale * 18,
                         ratioOut:1,
                         ratioIn:1,
-                        mass:1000
+                        mass:1
                     }
                 });
 
