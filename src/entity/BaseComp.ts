@@ -25,9 +25,9 @@ export default class
     }
 
 
-    addUpdateCallback(callback:Function, updateStep:E_UpdateStep):void
+    addUpdateCallback(updateStep:E_UpdateStep, callback:Function|undefined = undefined):void
     {
-        this.updateCallbacks.push(app.game.addUpdateCallback(callback, updateStep));
+        this.updateCallbacks.push(app.game.addUpdateCallback(this.update.bind(this), updateStep));
     }
 
 

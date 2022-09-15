@@ -62,6 +62,8 @@ function start():void
 {
     PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
+    app.pixi.stage.interactive = true;
+
     app.assets.init();
     app.gamepadController.init();
     app.game.init();

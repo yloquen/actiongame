@@ -8,7 +8,7 @@
  "margin":0,
  "name":"tiles",
  "spacing":0,
- "tilecount":42,
+ "tilecount":43,
  "tiledversion":"1.8.6",
  "tileheight":16,
  "tiles":[
@@ -263,6 +263,12 @@
          "image":"..\/..\/..\/design\/assets\/terrain\/wall\/long_wall.png",
          "imageheight":16,
          "imagewidth":48
+        }, 
+        {
+         "id":43,
+         "image":"..\/..\/..\/design\/assets\/puzzle\/puzzle_activator.png",
+         "imageheight":16,
+         "imagewidth":16
         }],
  "tilewidth":48,
  "type":"tileset",

@@ -44,7 +44,7 @@ export default class CameraController
         this.targetPos.x = this.centerX - this.charPosition.x;
         this.targetPos.y = this.centerY - this.charPosition.y;
 
-        const cameraDamp = .05;
+        const cameraDamp = .1;
         this.mainContainer.x += (this.targetPos.x - this.mainContainer.x) * cameraDamp;
         this.mainContainer.y += (this.targetPos.y - this.mainContainer.y) * cameraDamp;
     }

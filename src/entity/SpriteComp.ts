@@ -34,7 +34,7 @@ export default class SpriteComp extends BaseComp
 
         if (!this.physics.collider?.isStatic)
         {
-            this.addUpdateCallback(this.update.bind(this), E_UpdateStep.MOVEMENT);
+            this.addUpdateCallback(E_UpdateStep.MOVEMENT);
         }
     }
 

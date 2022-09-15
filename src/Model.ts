@@ -4,7 +4,7 @@ export default class Model
 
     constructor()
     {
-        this.scale = 5;
+        this.scale = 4;
     }
 
 }

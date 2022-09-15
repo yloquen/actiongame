@@ -1,8 +1,8 @@
 import PhysicsComp from "../entity/PhysicsComp";
 import Point from "../geom/Point";
-import BaseCollider, {BoundsData} from "./BaseCollider";
+import CircleCollider, {BoundsData} from "./CircleCollider";
 
-export default class PolyCollider extends BaseCollider
+export default class PolyCollider extends CircleCollider
 {
     public points:Point[];
     public pointsLocal:Point[];
@@ -13,7 +13,8 @@ export default class PolyCollider extends BaseCollider
     public center:Point;
     public centerLocal:Point;
     public projMinMax:[number, number][];
-    private tempPoint:Point;
+
+    private readonly tempPoint:Point;
 
 
     constructor(data:any, physics:PhysicsComp)
@@ -29,6 +30,7 @@ export default class PolyCollider extends BaseCollider
         this.centerLocal = new Point();
         this.projMinMax = [];
         this.tempPoint = new Point();
+        this.radius = 0;
 
         const numPoints = data.points.length;
         this.numPoints = numPoints;
@@ -41,6 +43,8 @@ export default class PolyCollider extends BaseCollider
 
             const lp = new Point(pointData.x, pointData.y);
             this.pointsLocal.push(lp);
+
+            this.radius = Math.max(this.radius, lp.length());
 
             this.centerLocal.add(lp);
         }
@@ -100,7 +104,6 @@ export default class PolyCollider extends BaseCollider
         this.center.copyFrom(this.centerLocal);
         this.center.add(pos);
     }
-
 
 
 }

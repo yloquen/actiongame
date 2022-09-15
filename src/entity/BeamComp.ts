@@ -4,7 +4,7 @@ import {app} from "../index";
 import E_UpdateStep from "../const/E_UpdateStep";
 import Point from "../geom/Point";
 import Entity from "./Entity";
-import PhysicsComp, {E_ColliderType} from "./PhysicsComp";
+import PhysicsComp from "./PhysicsComp";
 import AnimSpriteComp from "./AnimSpriteComp";
 import E_SpriteState from "../const/E_SpriteState";
 import SimpleProjectileComp from "./SimpleProjectileComp";
@@ -37,7 +37,7 @@ export default class BeamComp extends BaseComp
         this.charController = this.entity.getComponent(CharControlComp)!;
         this.cooldown = 0;
         this.chargeTime = 0;
-        this.addUpdateCallback(this.update.bind(this), E_UpdateStep.CREATION);
+        this.addUpdateCallback(E_UpdateStep.CREATION);
 
         this.waveBeam = new WaveBeam();
         app.viewManager.addChild(E_ViewLayer.CHARACTERS_2, this.waveBeam.sprite);

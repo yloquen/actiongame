@@ -1,23 +1,16 @@
 import Entity from "./entity/Entity";
-import KeyboardController from "./KeyboardController";
-import PhysicsComp, {E_ColliderType} from "./entity/PhysicsComp";
+import PhysicsComp from "./entity/PhysicsComp";
 import {app} from "./index";
-import Point from "./geom/Point";
 import AnimSpriteComp from "./entity/AnimSpriteComp";
 import E_SpriteState from "./const/E_SpriteState";
 import E_UpdateStep from "./const/E_UpdateStep";
-import GamepadController from "./GamepadController";
-import Util from "./util/Util";
 import ShooterComp from "./entity/ShooterComp";
 import CharControlComp from "./entity/CharControlComp";
-import CircleCollider from "./physics/CircleCollider";
-import SimpleProjectileComp from "./entity/SimpleProjectileComp";
-import Rectangle = PIXI.Rectangle;
-import RectCollider from "./physics/RectCollider";
+import MouseControlComp from "./entity/MouseControlComp";
 import BeamComp from "./entity/BeamComp";
-import GrowingProjectileComp from "./entity/GrowingProjectileComp";
 import GrowingProjectileWeaponComp from "./entity/GrowingProjectileWeaponComp";
 import PolyCollider from "./physics/PolyCollider";
+import CircleCollider from "./physics/CircleCollider";
 
 export type UpdateData =
 {
@@ -55,30 +48,30 @@ export default class Game
                 {
                     compType:PhysicsComp,
                     pos:{x:0, y:0},
-                    // collider:
-                    // {
-                    //     type: CircleCollider,
-                    //     radius:app.model.scale*10,
-                    //     ratioOut:1,
-                    //     ratioIn:1
-                    // }
                     collider:
                     {
-                        type: PolyCollider,
-                        points:[
-
-                            {x:0, y:-85},
-                            {x:50, y:0},
-                            //{x:0, y:95},
-                            {x:-50, y:0}
-                        ],
-                        // type: RectCollider,
-                        // width:app.model.scale * 18,
-                        // height:app.model.scale * 18,
+                        type: CircleCollider,
+                        radius:app.model.scale*10,
                         ratioOut:1,
-                        ratioIn:1,
-                        mass:1,
+                        ratioIn:1
                     }
+                    // collider:
+                    // {
+                    //     type: PolyCollider,
+                    //     points:[
+                    //
+                    //         {x:0, y:-85},
+                    //         {x:50, y:0},
+                    //         //{x:0, y:95},
+                    //         {x:-50, y:0}
+                    //     ],
+                    //     // type: RectCollider,
+                    //     // width:app.model.scale * 18,
+                    //     // height:app.model.scale * 18,
+                    //     ratioOut:1,
+                    //     ratioIn:1,
+                    //     mass:1,
+                    // }
                 },
                 {
                     compType:AnimSpriteComp,
@@ -100,6 +93,9 @@ export default class Game
                 },
                 {
                     compType:CharControlComp
+                },
+                {
+                    compType:MouseControlComp
                 },
                 {
                     compType:ShooterComp

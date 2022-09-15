@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import BaseComp from "./BaseComp";
 import {app} from "../index";
 import E_UpdateStep from "../const/E_UpdateStep";
-import PhysicsComp, {E_ColliderType} from "./PhysicsComp";
+import PhysicsComp from "./PhysicsComp";
 import ShooterComp from "./ShooterComp";
 
 enum E_GamepadButtons
@@ -25,7 +25,7 @@ export default class CharControlComp extends BaseComp
 
     init():void
     {
-        this.addUpdateCallback(this.update.bind(this), E_UpdateStep.POST_INPUT);
+        this.addUpdateCallback(E_UpdateStep.POST_INPUT);
 
         this.physics = this.entity.getComponent(PhysicsComp)!;
 

@@ -1,15 +1,13 @@
 import {app} from "./index";
 import {E_ViewLayer} from "./ViewManager";
 import Entity from "./entity/Entity";
-import PhysicsComp, {E_ColliderType} from "./entity/PhysicsComp";
-import AnimSpriteComp from "./entity/AnimSpriteComp";
-import E_SpriteState from "./const/E_SpriteState";
-import CharControlComp from "./entity/CharControlComp";
+import PhysicsComp from "./entity/PhysicsComp";
 
-import RectCollider from "./physics/RectCollider";
 import { E_EFlag } from "./entity/Entity";
 import PolyCollider from "./physics/PolyCollider";
 import SpriteComp from "./entity/SpriteComp";
+import CircleCollider from "./physics/CircleCollider";
+import RectCollider from "./physics/RectCollider";
 
 
 export default class MapGenerator
@@ -131,7 +129,7 @@ export default class MapGenerator
                     collider:
                     {
                         type: PolyCollider,
-                        //isStatic: true,
+                        // isStatic: true,
                         points:[
                             // {x:xPos - hw, y:yPos - hh},
                             // {x:xPos + hw, y:yPos - hh},
@@ -147,13 +145,18 @@ export default class MapGenerator
                             {x:-70, y:0},
                             {x:-50, y:-80}
                         ],
-                        // type: RectCollider,
-                        // width:app.model.scale * 18,
-                        // height:app.model.scale * 18,
                         ratioOut:1,
-                        ratioIn:1,
-                        mass:1
+                        ratioIn:0,
+                        mass:1//Number.MAX_VALUE
                     }
+                    // collider:
+                    // {
+                    //     type: CircleCollider,
+                    //     isStatic:true,
+                    //     radius:app.model.scale*10,
+                    //     ratioOut:1,
+                    //     ratioIn:1,
+                    // },
                 });
 
                 entityData.flags.push(E_EFlag.WALL);

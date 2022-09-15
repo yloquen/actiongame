@@ -1,6 +1,5 @@
-import BaseCollider, {BoundsData} from "./BaseCollider";
+import CircleCollider, {BoundsData} from "./CircleCollider";
 import Point from "../geom/Point";
-import CircleCollider from "./CircleCollider";
 import CollisionResult from "./CollisionResult";
 import PolyCollider from "./PolyCollider";
 import MathUtil from "../util/MathUtil";
@@ -10,7 +9,7 @@ export default class PhysicsEngine
 {
     public debug:boolean = true;
 
-    private readonly colliders:BaseCollider[];
+    private readonly colliders:CircleCollider[];
     private readonly activeBounds:Record<number, BoundsData>;
     private readonly bounds:BoundsData[];
     private readonly collisionResults:[CollisionResult, CollisionResult];
@@ -28,7 +27,7 @@ export default class PhysicsEngine
     }
 
 
-    addCollider(c:BaseCollider):void
+    addCollider(c:CircleCollider):void
     {
         this.colliders.push(c);
         const bounds = c.getBounds();
@@ -36,7 +35,7 @@ export default class PhysicsEngine
     }
 
 
-    removeCollider(c:BaseCollider):void
+    removeCollider(c:CircleCollider):void
     {
         const index = this.colliders.indexOf(c);
         if (index !== -1)
@@ -63,14 +62,12 @@ export default class PhysicsEngine
     {
         this.colliders.forEach(c =>
         {
-            //if (!c.isStatic)
+            if (!c.isStatic)
             {
                 c.updateBounds();
             }
             c.collisions.length = 0;
         });
-        // Util.startBenchmark();
-        //console.log("\n=======");
         let numTests = 0;
         let numCollisions = 0;
         for (let c1idx = 0; c1idx < this.colliders.length - 1; c1idx++)
@@ -83,8 +80,6 @@ export default class PhysicsEngine
                 const collisionResult = this.test(c1, c2);
             }
         }
-        // Util.endBenchmark();
-        // console.log(numCollisions + "/" + numTests);
 
         this.colliders.forEach(c => c.applyCollision());
     }
@@ -92,12 +87,9 @@ export default class PhysicsEngine
 
     checkCollisions():void
     {
-        // Util.startBenchmark();
-        // console.log(">" + this.colliders.length);
-
         this.colliders.forEach(c =>
         {
-            //if (!c.isStatic)
+            if (!c.isStatic)
             {
                 c.updateBounds();
             }
@@ -106,11 +98,8 @@ export default class PhysicsEngine
 
         this.bounds.sort((e1, e2) => {return e1.x - e2.x});
 
-        // this.activeBounds.length = 0;
-
         let activeIdx = 0;
 
-        //console.log("\n======");
         for (let bIdx = 0; bIdx < this.bounds.length ; bIdx++)
         {
             const boundsData = this.bounds[bIdx];
@@ -121,13 +110,11 @@ export default class PhysicsEngine
                 const uid = c1.physics.entity.uid;
                 this.activeBounds[uid] = boundsData;
 
-                // this.activeBounds.push(boundsData);
                 for(let uid in this.activeBounds)
                 {
                     const c2 = this.activeBounds[uid].collider;
                     if (c1 !== c2)
                     {
-                        //console.log("Testing " + c1.physics.entity.uid + " : " + c2.physics.entity.uid);
                         this.test(c1, c2);
                     }
                 }
@@ -139,13 +126,10 @@ export default class PhysicsEngine
         }
 
         this.colliders.forEach(c => c.applyCollision());
-
-        // Util.endBenchmark();
-        // console.log(numCollisions + "/" + numTests);
     }
 
 
-    test(c1:BaseCollider, c2:BaseCollider):void
+    test(c1:CircleCollider, c2:CircleCollider):void
     {
         if (c1.isStatic && c2.isStatic)
         {
@@ -171,124 +155,99 @@ export default class PhysicsEngine
     }
 
 
-    testCircVsPoly(cc:CircleCollider, pc:PolyCollider):[CollisionResult, CollisionResult]|undefined
+    testCircVsPoly(cc:CircleCollider, pc:PolyCollider):void
     {
-        const circCenter = cc.physics.position;
-        // this.collisionResults.forEach(cr => cr.targetPos.set(0,0));
+        if (!this.circleBoundsTest(cc, pc))
+        {
+            return;
+        }
 
-        let moveDist = Number.POSITIVE_INFINITY;
-        let moveIdx = -1;
-        let hasNegative = false;
+        const circCenter = cc.physics.position;
+
+        const moveVec = this.tempPts[2];
+        moveVec.set(0,0);
+        let minMoveDist = Number.MAX_VALUE;
+        const centerVec = this.tempPts[1];
+
 
         for (let ptIdx = 0; ptIdx < pc.numPoints; ptIdx++)
         {
             const lineVector = pc.lineVectors[ptIdx];
 
-            const centerVec = this.tempPts[0];
             centerVec.copyFrom(circCenter);
             centerVec.sub(pc.points[ptIdx]);
 
-            const centerLen = centerVec.length();
-
+            const r = lineVector.projectionRatio(centerVec);
             const lineLen = lineVector.length();
-            const cosAlpha = lineVector.dotProduct(centerVec) / (lineLen * centerLen);
-            const outstretch = Math.max(0, Math.abs(.5 - (centerLen/lineLen) * cosAlpha) * 2 - 1.0) * lineLen;
-
-            let pushDecrease = cc.radius;
-            if (cc.radius > outstretch)
-            {
-                pushDecrease = cc.radius - Math.sqrt(cc.radius * cc.radius - outstretch * outstretch);
-            }
-
             const crossProduct = (lineVector.x * centerVec.y - lineVector.y * centerVec.x) / lineLen;
 
-            if (crossProduct < 0 )
+            if (r < 0)
             {
-                if (!hasNegative)
+                const centerVecLen = centerVec.length();
+                if (centerVecLen < cc.radius)
                 {
-                    hasNegative = true;
-                    moveIdx = -1;
-                    moveDist = 0;
-                }
-
-                if (-cc.radius < crossProduct)
-                {
-                    const move = crossProduct + cc.radius - pushDecrease;
-                    if (move > moveDist)
+                    centerVec.normalize().scale(cc.radius - centerVecLen);
+                    if (centerVecLen < minMoveDist)
                     {
-                        moveDist = move;
-                        moveIdx = ptIdx;
+                        minMoveDist = centerVecLen;
+                        moveVec.copyFrom(centerVec);
                     }
                 }
             }
-            else if (!hasNegative)
+            else if (r < 1)
             {
-                const move = crossProduct + cc.radius;
-
-                if (move > 0 && move < moveDist)
+                if (Math.abs(crossProduct) < cc.radius)
                 {
-                    moveDist = move;
-                    moveIdx = ptIdx;
+                    const moveDist = cc.radius + crossProduct;
+                    if (moveDist > 0 && moveDist < minMoveDist)
+                    {
+                        minMoveDist = moveDist;
+                        moveVec.copyFrom(pc.normals[ptIdx]).scale(moveDist);
+                    }
                 }
+
+
             }
-
         }
 
-        if (moveIdx !== -1)
-        {
-            this.tempPts[0].copyFrom(pc.normals[moveIdx]);
-            this.tempPts[0].scale(moveDist);
-            cc.addCollisionResult(this.tempPts[0], pc);
-            pc.addCollisionResult(this.tempPts[0], cc);
-        }
-
-        return;
+        this.applyCollisionResult(cc, pc, moveVec);
     }
 
 
-    testCircVsCirc(c1:CircleCollider, c2:CircleCollider):[CollisionResult, CollisionResult]|undefined
+    testCircVsCirc(c1:CircleCollider, c2:CircleCollider):void
     {
-        const deltaX = c1.physics.position.x - c2.physics.position.x;
-        const deltaY = c1.physics.position.y - c2.physics.position.y;
-
-        this.tempPts[0].set(deltaX, deltaY);
+        this.tempPts[0].copyFrom(c1.physics.position).sub(c2.physics.position);
         const distance = this.tempPts[0].length();
         const radiusSum = (c1.radius + c2.radius);
-        const penetration = radiusSum - distance;
 
-        if (penetration <= 0)
+        if (distance < radiusSum)
         {
-            return;
+            if (distance === 0)
+            {
+                this.tempPts[0].set((Math.random() - .5) * 0.01, (Math.random() - .5) * 0.01);
+            }
+
+            this.tempPts[0].normalize();
+            this.tempPts[0].scale(radiusSum - distance);
+            this.applyCollisionResult(c1, c2, this.tempPts[0]);
         }
-
-        if (distance === 0)
-        {
-            this.tempPts[0].x = (Math.random() - .5) * 0.01;
-            this.tempPts[0].y = (Math.random() - .5) * 0.01;
-        }
-
-        this.tempPts[0].normalize();
-        this.tempPts[0].scale(penetration * (c1.radius / radiusSum));
-
-        this.tempPts[1].copyFrom(this.tempPts[0]);
-        this.tempPts[1].scale(-1);
-
-        c1.addCollisionResult(this.tempPts[0], c2);
-        c2.addCollisionResult(this.tempPts[1], c1);
     }
 
 
     testPolyVsPoly(c1:PolyCollider, c2:PolyCollider):void
     {
+        if (!this.circleBoundsTest(c1, c2))
+        {
+            return;
+        }
+
         let collision = true;
 
-        // let move = Number.POSITIVE_INFINITY;
         const minMoveVec:Point = this.tempPts[0];
         minMoveVec.set(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY);
         const currMoveVec:Point = this.tempPts[1];
         let sideIndex = -1;
         let collider:PolyCollider|undefined;
-        let init = false;
 
         [[c1,c2],[c2,c1]].forEach((c:PolyCollider[], index:number) =>
         {
@@ -316,7 +275,6 @@ export default class PhysicsEngine
                     sign *= (index === 0 ? 1 : -1);
                     sideIndex = oIdx;
                     minMoveVec.copyFrom(currMoveVec).scale(sign);
-                    // console.log("." + move * minMoveVec.length() + " oIdx " + oIdx);
                     collider = c[0];
                 }
             }
@@ -324,14 +282,43 @@ export default class PhysicsEngine
 
         if (collision)
         {
-            //console.log(collider?.physics.entity.uid + "." + sideIndex + " " +  minMoveVec);
-            minMoveVec.scale(.5);
-            c1.addCollisionResult(minMoveVec, c2);
-            //console.log(c1.physics.entity.uid + " move: " + minMoveVec);
-            minMoveVec.scale(-1);
-            c2.addCollisionResult(minMoveVec, c1);
-            ///console.log(c2.physics.entity.uid + " move: " + minMoveVec);
+            this.applyCollisionResult(c1, c2, minMoveVec);
         }
+    }
+
+
+    circleBoundsTest(c1:CircleCollider, c2:CircleCollider):boolean
+    {
+        const centerDist = this.tempPts[0].copyFrom(c1.physics.position).sub(c2.physics.position).length();
+        return centerDist < (c1.radius + c2.radius);
+    }
+
+
+    applyCollisionResult(c1:CircleCollider, c2:CircleCollider, moveVec:Point):void
+    {
+        this.tempPts[0].copyFrom(moveVec);
+        this.tempPts[1].copyFrom(moveVec);
+
+        let r1 = 0, r2 = 0;
+        if (c1.isStatic)
+        {
+            r2 = 1;
+        }
+        else if (c2.isStatic)
+        {
+            r1 = 1;
+        }
+        else
+        {
+            const totalMass = c1.mass + c2.mass;
+            r1 = 1 - c1.mass / totalMass;
+            r2 = 1 - c2.mass / totalMass;
+        }
+
+        this.tempPts[0].scale(r1);
+        c1.addCollisionResult(this.tempPts[0], c2);
+        this.tempPts[1].scale(-r2);
+        c2.addCollisionResult(this.tempPts[1], c1);
     }
 
 

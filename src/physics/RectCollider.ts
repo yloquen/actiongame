@@ -1,8 +1,8 @@
 import PhysicsComp from "../entity/PhysicsComp";
 import Point from "../geom/Point";
-import BaseCollider, {BoundsData} from "./BaseCollider";
+import CircleCollider, {BoundsData} from "./CircleCollider";
 
-export default class RectCollider extends BaseCollider
+export default class RectCollider extends CircleCollider
 {
 
 

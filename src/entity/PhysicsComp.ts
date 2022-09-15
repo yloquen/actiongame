@@ -3,33 +3,24 @@ import BaseComp from "./BaseComp";
 import Entity from "./Entity";
 import {app} from "../index";
 import Point from "../geom/Point";
-import BaseCollider from "../physics/BaseCollider";
+import CircleCollider from "../physics/CircleCollider";
 import E_UpdateStep from "../const/E_UpdateStep";
 import CharControlComp from "./CharControlComp";
-import CircleCollider from "../physics/CircleCollider";
 import AnimSpriteComp from "./AnimSpriteComp";
 import PolyCollider from "../physics/PolyCollider";
 import SpriteComp from "./SpriteComp";
 
-export enum E_ColliderType
-{
-    RECTANGLE,
-    CIRCLE
-}
 
 export default class PhysicsComp extends BaseComp
 {
-
-    public collider:BaseCollider;
+    public collider:CircleCollider;
     public position:Point;
     public velocity:Point;
-    public mass:number;
 
     constructor(e:Entity, data:any)
     {
         super(e,data);
         this.velocity = this.data.velocity ? this.data.velocity.clone() : new Point(0,0);
-        this.mass = data.mass ? data.mass : 1;
         this.position = new Point(this.data.pos.x, this.data.pos.y);
     }
 
@@ -46,15 +37,14 @@ export default class PhysicsComp extends BaseComp
         if (app.physics.debug && colliderData)
         {
             const g = new PIXI.Graphics();
+
             g.beginFill(0xff00ff,0);
             g.lineTextureStyle({ width:app.model.scale, color:0xff00ff,
                 cap:PIXI.LINE_CAP.BUTT, join:PIXI.LINE_JOIN.ROUND, alignment:0 });
             g.scale.set(1/app.model.scale);
-            if (colliderData.type === CircleCollider)
-            {
-                g.drawCircle(0,0,colliderData.radius);
-            }
-            else if (colliderData.type === PolyCollider)
+            g.drawCircle(0, 0, this.collider.radius);
+
+            if (colliderData.type === PolyCollider)
             {
                 const points = colliderData.points;
                 const numPoints = points.length;
@@ -71,7 +61,6 @@ export default class PhysicsComp extends BaseComp
                         g.lineTo(p.x, p.y);
                     }
                 }
-
             }
             g.endFill();
 
@@ -80,10 +69,8 @@ export default class PhysicsComp extends BaseComp
             {
                 container.addChild(g);
             }
-
         }
-
-        this.addUpdateCallback(this.update.bind(this), E_UpdateStep.MOVEMENT);
+        this.addUpdateCallback(E_UpdateStep.MOVEMENT);
     }
 
 

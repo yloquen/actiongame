@@ -33,7 +33,7 @@ export default class AnimSpriteComp extends BaseComp
         this.anim.sprite.y = this.physics.position.y;
         this.anim.sprite.alpha = this.data.alpha || 1;
         // this.anim.sprite.scale.set(15);
-        this.addUpdateCallback(this.update.bind(this), E_UpdateStep.MOVEMENT);
+        this.addUpdateCallback(E_UpdateStep.MOVEMENT);
 
 
     }

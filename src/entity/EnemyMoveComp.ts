@@ -22,7 +22,7 @@ export default class EnemyMoveComp extends BaseComp
         this.health = this.data.health;
         this.physics = this.entity.getComponent(PhysicsComp)!;
 
-        this.addUpdateCallback(this.update.bind(this), E_UpdateStep.PRE_MOVEMENT);
+        this.addUpdateCallback(E_UpdateStep.PRE_MOVEMENT);
     }
 
 

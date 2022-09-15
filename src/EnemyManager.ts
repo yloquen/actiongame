@@ -1,6 +1,6 @@
 import {app} from "./index";
 import Entity from "./entity/Entity";
-import PhysicsComp, {E_ColliderType} from "./entity/PhysicsComp";
+import PhysicsComp from "./entity/PhysicsComp";
 import AnimSpriteComp from "./entity/AnimSpriteComp";
 import E_SpriteState from "./const/E_SpriteState";
 import Point from "./geom/Point";
@@ -67,7 +67,6 @@ export default class EnemyManager
                             collider:
                                 {
                                     type: PolyCollider,
-                                    //isStatic: true,
                                     points:[
                                         {x:0, y:-120},
                                         {x:90, y:0},
