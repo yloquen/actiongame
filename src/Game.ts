@@ -11,6 +11,7 @@ import BeamComp from "./entity/BeamComp";
 import GrowingProjectileWeaponComp from "./entity/GrowingProjectileWeaponComp";
 import PolyCollider from "./physics/PolyCollider";
 import CircleCollider from "./physics/CircleCollider";
+import C_Game from "./const/C_Game";
 
 export type UpdateData =
 {
@@ -51,27 +52,10 @@ export default class Game
                     collider:
                     {
                         type: CircleCollider,
-                        radius:app.model.scale*10,
+                        radius:C_Game.SCALE*5,
                         ratioOut:1,
                         ratioIn:1
                     }
-                    // collider:
-                    // {
-                    //     type: PolyCollider,
-                    //     points:[
-                    //
-                    //         {x:0, y:-85},
-                    //         {x:50, y:0},
-                    //         //{x:0, y:95},
-                    //         {x:-50, y:0}
-                    //     ],
-                    //     // type: RectCollider,
-                    //     // width:app.model.scale * 18,
-                    //     // height:app.model.scale * 18,
-                    //     ratioOut:1,
-                    //     ratioIn:1,
-                    //     mass:1,
-                    // }
                 },
                 {
                     compType:AnimSpriteComp,
@@ -79,13 +63,15 @@ export default class Game
                     [
                         {
                             stateName:E_SpriteState.IDLE,
-                            numFrames:6, updateTime:100,
+                            numFrames:6,
+                            updateTime:100,
                             texturePrefix:"knight_idle_anim_f",
                             frame:0
                         },
                         {
                             stateName:E_SpriteState.WALK,
-                            numFrames:6, updateTime:100,
+                            numFrames:6,
+                            updateTime:100,
                             texturePrefix:"knight_run_anim_f",
                             frame:0
                         }

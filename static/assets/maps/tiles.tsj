@@ -8,7 +8,7 @@
  "margin":0,
  "name":"tiles",
  "spacing":0,
- "tilecount":43,
+ "tilecount":45,
  "tiledversion":"1.8.6",
  "tileheight":16,
  "tiles":[
@@ -267,6 +267,18 @@
         {
          "id":43,
          "image":"..\/..\/..\/design\/assets\/puzzle\/puzzle_activator.png",
+         "imageheight":16,
+         "imagewidth":16
+        }, 
+        {
+         "id":44,
+         "image":"..\/..\/..\/design\/assets\/puzzle\/bg_1.png",
+         "imageheight":16,
+         "imagewidth":16
+        }, 
+        {
+         "id":45,
+         "image":"..\/..\/..\/design\/assets\/puzzle\/dot_1.png",
          "imageheight":16,
          "imagewidth":16
         }],

@@ -8,6 +8,7 @@ import {gsap} from "gsap";
 import {E_ViewLayer} from "../ViewManager";
 import * as PIXI from "pixi.js";
 import Entity from "./Entity";
+import C_Game from "../const/C_Game";
 
 export default class SpriteComp extends BaseComp
 {
@@ -22,7 +23,7 @@ export default class SpriteComp extends BaseComp
 
         this.sprite = app.assets.getSprite(data.textureId);
         this.sprite.anchor.set(.5);
-        this.sprite.scale.set(app.model.scale);
+        this.sprite.scale.set(C_Game.SCALE);
         app.viewManager.addChild(data.layer, this.sprite);
     }
 

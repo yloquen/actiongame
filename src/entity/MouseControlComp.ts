@@ -9,7 +9,7 @@ import Point from "../geom/Point";
 
 
 
-export default class CharControlComp extends BaseComp
+export default class MouseControlComp extends BaseComp
 {
     private physics:PhysicsComp;
     private tempPt:PIXI.Point;
@@ -25,16 +25,29 @@ export default class CharControlComp extends BaseComp
         this.tempPt = new PIXI.Point();
         this.targetPos = new Point();
         this.tempPt2 = new Point();
-        document.addEventListener("mousedown", this.handleMouseDown.bind(this));
+        app.pixi.stage.addListener(C_PointerEvt.DOWN, this.handlePointerDown.bind(this));
+        app.pixi.stage.addListener(C_PointerEvt.UP, this.handlePointerUp.bind(this));
+        app.pixi.stage.addListener(C_PointerEvt.UPOUTSIDE, this.handlePointerUp.bind(this));
     }
 
 
-    handleMouseDown(e:MouseEvent):void
+    handlePointerDown(e:InteractionEvent):void
     {
-        this.tempPt.x = e.clientX;
-        this.tempPt.y = e.clientY;
-        app.viewManager.mainContainer.toLocal(this.tempPt, undefined, this.tempPt);
+        app.pixi.stage.addListener(C_PointerEvt.MOVE, this.handlePointerMove, this);
+        this.handlePointerMove(e);
+    }
+
+
+    handlePointerMove(e:InteractionEvent):void
+    {
+        app.viewManager.mainContainer.toLocal(e.data.global, undefined, this.tempPt);
         this.targetPos.set(this.tempPt.x, this.tempPt.y);
+    }
+
+
+    handlePointerUp(e:InteractionEvent):void
+    {
+        app.pixi.stage.removeListener(C_PointerEvt.MOVE, this.handlePointerMove, this);
     }
 
 

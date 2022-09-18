@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js";
 import {app} from "./index";
+import C_Game from "./const/C_Game";
 
 export default class
 {
@@ -100,7 +101,7 @@ export default class
         {
             const s = app.assets.getSprite("d" + d);
             s.tint = 0xff0000;
-            s.scale.set(app.model.scale * .6);
+            s.scale.set(C_Game.SCALE * .6);
             s.x = x;
             s.anchor.set(0,.5);
             x+= s.width;

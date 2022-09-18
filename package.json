@@ -14,7 +14,7 @@
   "license": "",
   "dependencies": {
     "@types/howler": "^2.2.7",
-    "gsap": "^3.5.1",
+    "gsap": "^3.11.1",
     "howler": "^2.2.3",
     "pixi.js": "^5.3.10"
   },

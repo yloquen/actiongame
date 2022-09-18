@@ -9,6 +9,7 @@ import CharControlComp from "./CharControlComp";
 import AnimSpriteComp from "./AnimSpriteComp";
 import PolyCollider from "../physics/PolyCollider";
 import SpriteComp from "./SpriteComp";
+import C_Game from "../const/C_Game";
 
 
 export default class PhysicsComp extends BaseComp
@@ -39,9 +40,9 @@ export default class PhysicsComp extends BaseComp
             const g = new PIXI.Graphics();
 
             g.beginFill(0xff00ff,0);
-            g.lineTextureStyle({ width:app.model.scale, color:0xff00ff,
+            g.lineTextureStyle({ width:C_Game.SCALE, color:0xff00ff,
                 cap:PIXI.LINE_CAP.BUTT, join:PIXI.LINE_JOIN.ROUND, alignment:0 });
-            g.scale.set(1/app.model.scale);
+            g.scale.set(1/C_Game.SCALE);
             g.drawCircle(0, 0, this.collider.radius);
 
             if (colliderData.type === PolyCollider)

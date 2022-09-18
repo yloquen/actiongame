@@ -8,14 +8,26 @@ import PolyCollider from "./physics/PolyCollider";
 import SpriteComp from "./entity/SpriteComp";
 import CircleCollider from "./physics/CircleCollider";
 import RectCollider from "./physics/RectCollider";
+import C_LayerObjType from "./const/C_LayerObjType";
+import Util from "./util/Util";
+import Puzzle from "./puzzle/Puzzle";
+import PuzzleComp from "./entity/PuzzleComp";
+import C_Game from "./const/C_Game";
 
 
 export default class MapGenerator
 {
     public textureDictionary:any[];
+
     private layers:number[][][];
 
+    private readonly puzzles:Puzzle[][];
 
+
+    constructor()
+    {
+        this.puzzles = [];
+    }
 
     init():void
     {
@@ -42,6 +54,49 @@ export default class MapGenerator
                 for (let y = 0; y < h; y++)
                 {
                     this.layers[index][x][y] = layerData.data[y * w + x];
+                }
+            }
+
+            if (layerData.properties)
+            {
+                // Parse layer props
+                // const props = JSON.parse(layerData.properties[0].value);
+            }
+
+            if (layerData.objects)
+            {
+
+
+                for (let objIdx=0; objIdx<layerData.objects.length; objIdx++)
+                {
+                    const object = layerData.objects[objIdx];
+                    // Util.coordToGrid(object);
+
+                    switch (object.type)
+                    {
+
+                        case C_LayerObjType.PUZZLE:
+                        {
+                            const data = {};
+                            const id = Util.getProp(object, "id");
+
+                            if (!this.puzzles[id])
+                            {
+                                this.puzzles[id] = [];
+                            }
+
+                            const subId = Util.getProp(object, "sub_id");
+                            {
+                                const name = `puzzle_${id}_${subId}`;
+                                const data = JSON.parse(app.assets.resources[name].data);
+                                const puzzle = new Puzzle(data);
+                                this.puzzles[id][subId] = puzzle;
+                                new Entity({components:[{compType:PuzzleComp, puzzle:puzzle}]});
+                            }
+
+                            break;
+                        }
+                    }
                 }
             }
         });
@@ -71,8 +126,8 @@ export default class MapGenerator
                 {
                     const tileId = layerColumn[y];
 
-                    const xPos = (8 + x * 16) * app.model.scale;
-                    const yPos = (8 + y * 16) * app.model.scale;
+                    const xPos = (C_Game.TILE_HALF_SIZE + x * C_Game.TILE_SIZE) * C_Game.SCALE;
+                    const yPos = (C_Game.TILE_HALF_SIZE + y * C_Game.TILE_SIZE) * C_Game.SCALE;
 
                     this.createTileEntities(tileId, xPos, yPos, layerId);
                 }
@@ -89,7 +144,7 @@ export default class MapGenerator
             if (textureId !== "empty")
             {
                 const s = app.assets.getSprite(textureId);
-                s.scale.set(app.model.scale);
+                s.scale.set(C_Game.SCALE);
                 s.anchor.set(.5);
                 s.x = xPos;
                 s.y = yPos;
@@ -119,8 +174,8 @@ export default class MapGenerator
 
             case 40:
             {
-                const w = app.model.scale * 18;
-                const h = app.model.scale * 18;
+                const w = C_Game.SCALE * 18;
+                const h = C_Game.SCALE * 18;
                 const hw = w * .5;
                 const hh = h * .5;
                 entityData.components.push({
@@ -131,38 +186,33 @@ export default class MapGenerator
                         type: PolyCollider,
                         // isStatic: true,
                         points:[
-                            // {x:xPos - hw, y:yPos - hh},
-                            // {x:xPos + hw, y:yPos - hh},
-                            // {x:xPos + hw, y:yPos + hh},
-                            // {x:xPos - hw, y:yPos + hh}
-                            // {x:10, y:-100},
-                            // {x:130, y:30},
-                            // {x:20, y:100},
-                            // {x:-120, y:10}
-                            {x:0, y:-120},
-                            {x:90, y:0},
-                            {x:0, y:80},
-                            {x:-70, y:0},
-                            {x:-50, y:-80}
+                            {x: -hw, y: -hh},
+                            {x: hw, y: -hh},
+                            {x: hw, y: hh},
+                            {x: -hw, y: hh}
+                            // {x:0, y:-120},
+                            // {x:90, y:0},
+                            // {x:0, y:80},
+                            // {x:-70, y:0},
+                            // {x:-50, y:-80}
                         ],
                         ratioOut:1,
                         ratioIn:0,
                         mass:1//Number.MAX_VALUE
                     }
-                    // collider:
-                    // {
-                    //     type: CircleCollider,
-                    //     isStatic:true,
-                    //     radius:app.model.scale*10,
-                    //     ratioOut:1,
-                    //     ratioIn:1,
-                    // },
                 });
 
                 entityData.flags.push(E_EFlag.WALL);
 
                 break;
             }
+
+/*            case 44:
+            {
+
+
+                break;
+            }*/
 
             default:
             {
@@ -174,7 +224,7 @@ export default class MapGenerator
             }
         }
 
-        const e = new Entity(entityData);
+        new Entity(entityData);
 
     }
 

@@ -23,7 +23,7 @@
          "name":"Tile Layer 1",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":25,
          "x":0,
          "y":0
@@ -48,8 +48,14 @@
          "id":2,
          "name":"Tile Layer 2",
          "opacity":1,
+         "properties":[
+                {
+                 "name":"puzzles",
+                 "type":"string",
+                 "value":"[\n\t[\n\t\t{\"x\":16, \"y\":9}\n\t]\n]"
+                }],
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":25,
          "x":0,
          "y":0
@@ -105,9 +111,42 @@
          "width":25,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":6,
+         "name":"Object Layer 1",
+         "objects":[
+                {
+                 "height":9.45454545454547,
+                 "id":17,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"sub_id",
+                         "type":"int",
+                         "value":1
+                        }],
+                 "rotation":0,
+                 "type":"puzzle",
+                 "visible":true,
+                 "width":8.54545454545462,
+                 "x":259.636363636364,
+                 "y":147.818181818182
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":5,
- "nextobjectid":1,
+ "nextlayerid":7,
+ "nextobjectid":18,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.8.6",

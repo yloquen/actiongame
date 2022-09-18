@@ -55,6 +55,7 @@ app.pixi.loader
     .add("tilemap1", "assets/maps/map1.tmj?v=" + C_Game.ASSET_VER)
     .add("tilemap2", "assets/maps/map2.tmj?v=" + C_Game.ASSET_VER)
     .add("tileset", "assets/maps/tiles.tsj?v=" + C_Game.ASSET_VER)
+    .add("puzzle_1_1", "assets/maps/puzzle_1_1.tmj?v=" + C_Game.ASSET_VER)
     .load(start);
 
 

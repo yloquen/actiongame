@@ -4,6 +4,7 @@ import {app} from "./index";
 import {E_ViewLayer} from "./ViewManager";
 import E_UpdateStep from "./const/E_UpdateStep";
 import {UpdateData} from "./Game";
+import C_Game from "./const/C_Game";
 
 
 type SpriteAnimData =
@@ -39,7 +40,7 @@ export default class AnimSprite
         this.sprite = new PIXI.Sprite(PIXI.Texture.EMPTY);
         this.setTexture();
         this.sprite.anchor.set(.5);
-        this.sprite.scale.set(app.model.scale);
+        this.sprite.scale.set(C_Game.SCALE);
 
         app.viewManager.addChild(E_ViewLayer.CHARACTERS_1, this.sprite);
 

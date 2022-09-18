@@ -29,4 +29,18 @@ export default class Util
         }
         return undefined;
     }
+
+
+    static getProp(object:any, name:string):any
+    {
+        for (let i = 0; i < object.properties.length; i++)
+        {
+            const objectElement = object.properties[i];
+            if (objectElement.name === name)
+            {
+                return objectElement.value;
+            }
+        }
+    }
+
 }

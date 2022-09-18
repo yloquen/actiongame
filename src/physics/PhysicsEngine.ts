@@ -7,7 +7,7 @@ import MathUtil from "../util/MathUtil";
 
 export default class PhysicsEngine
 {
-    public debug:boolean = true;
+    public debug:boolean = false;
 
     private readonly colliders:CircleCollider[];
     private readonly activeBounds:Record<number, BoundsData>;

@@ -58,7 +58,7 @@ export default class EnemyManager
 /*                            collider:
                             {
                                 type:CircleCollider,
-                                radius:app.model.scale*5,
+                                radius:C_Game.SCALE*5,
                                 receiveCollisions:true,
                                 ratioOut:1,
                                 ratioIn:1
@@ -75,8 +75,8 @@ export default class EnemyManager
                                         {x:-50, y:-80}
                                     ],
                                     // type: RectCollider,
-                                    // width:app.model.scale * 18,
-                                    // height:app.model.scale * 18,
+                                    // width:C_Game.SCALE * 18,
+                                    // height:C_Game.SCALE * 18,
                                     ratioOut:1,
                                     ratioIn:1,
                                     mass:1

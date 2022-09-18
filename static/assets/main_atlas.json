@@ -792,7 +792,7 @@
         "y": 0.5
       }
     },
-    "puzzle_activator": {
+    "bg_1": {
       "frame": {
         "x": 64,
         "y": 70,
@@ -816,7 +816,31 @@
         "y": 0.5
       }
     },
-    "floor_1": {
+    "dot_1": {
+      "frame": {
+        "x": 62,
+        "y": 40,
+        "w": 4,
+        "h": 4
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 10,
+        "y": 6,
+        "w": 4,
+        "h": 4
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 16
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "puzzle_activator": {
       "frame": {
         "x": 23,
         "y": 104,
@@ -840,7 +864,7 @@
         "y": 0.5
       }
     },
-    "floor_10": {
+    "floor_1": {
       "frame": {
         "x": 4,
         "y": 185,
@@ -864,7 +888,7 @@
         "y": 0.5
       }
     },
-    "floor_2": {
+    "floor_10": {
       "frame": {
         "x": 180,
         "y": 4,
@@ -888,7 +912,7 @@
         "y": 0.5
       }
     },
-    "floor_3": {
+    "floor_2": {
       "frame": {
         "x": 138,
         "y": 28,
@@ -912,7 +936,7 @@
         "y": 0.5
       }
     },
-    "floor_4": {
+    "floor_3": {
       "frame": {
         "x": 113,
         "y": 69,
@@ -936,7 +960,7 @@
         "y": 0.5
       }
     },
-    "floor_5": {
+    "floor_4": {
       "frame": {
         "x": 59,
         "y": 94,
@@ -960,7 +984,7 @@
         "y": 0.5
       }
     },
-    "floor_6": {
+    "floor_5": {
       "frame": {
         "x": 4,
         "y": 209,
@@ -984,7 +1008,7 @@
         "y": 0.5
       }
     },
-    "floor_7": {
+    "floor_6": {
       "frame": {
         "x": 25,
         "y": 128,
@@ -1008,7 +1032,7 @@
         "y": 0.5
       }
     },
-    "floor_8": {
+    "floor_7": {
       "frame": {
         "x": 204,
         "y": 4,
@@ -1032,7 +1056,7 @@
         "y": 0.5
       }
     },
-    "floor_9": {
+    "floor_8": {
       "frame": {
         "x": 162,
         "y": 28,
@@ -1056,7 +1080,7 @@
         "y": 0.5
       }
     },
-    "floor_side": {
+    "floor_9": {
       "frame": {
         "x": 88,
         "y": 93,
@@ -1080,7 +1104,7 @@
         "y": 0.5
       }
     },
-    "floor_side2": {
+    "floor_side": {
       "frame": {
         "x": 137,
         "y": 52,
@@ -1104,7 +1128,7 @@
         "y": 0.5
       }
     },
-    "floor_side3": {
+    "floor_side2": {
       "frame": {
         "x": 4,
         "y": 233,
@@ -1128,7 +1152,7 @@
         "y": 0.5
       }
     },
-    "floor_side4": {
+    "floor_side3": {
       "frame": {
         "x": 25,
         "y": 152,
@@ -1152,7 +1176,7 @@
         "y": 0.5
       }
     },
-    "floor_side5": {
+    "floor_side4": {
       "frame": {
         "x": 49,
         "y": 118,
@@ -1176,7 +1200,7 @@
         "y": 0.5
       }
     },
-    "floor_side_left": {
+    "floor_side5": {
       "frame": {
         "x": 228,
         "y": 4,
@@ -1200,7 +1224,7 @@
         "y": 0.5
       }
     },
-    "floor_side_right": {
+    "floor_side_left": {
       "frame": {
         "x": 186,
         "y": 28,
@@ -1224,7 +1248,7 @@
         "y": 0.5
       }
     },
-    "floor_stair": {
+    "floor_side_right": {
       "frame": {
         "x": 112,
         "y": 93,
@@ -1248,7 +1272,7 @@
         "y": 0.5
       }
     },
-    "spikes_anim_f0": {
+    "floor_stair": {
       "frame": {
         "x": 83,
         "y": 117,
@@ -1272,7 +1296,7 @@
         "y": 0.5
       }
     },
-    "spikes_anim_f3": {
+    "spikes_anim_f0": {
       "frame": {
         "x": 137,
         "y": 76,
@@ -1296,7 +1320,7 @@
         "y": 0.5
       }
     },
-    "spikes_anim_f5": {
+    "spikes_anim_f3": {
       "frame": {
         "x": 161,
         "y": 52,
@@ -1320,7 +1344,7 @@
         "y": 0.5
       }
     },
-    "spikes_anim_f6": {
+    "spikes_anim_f5": {
       "frame": {
         "x": 4,
         "y": 257,
@@ -1344,7 +1368,7 @@
         "y": 0.5
       }
     },
-    "spikes_anim_f7": {
+    "spikes_anim_f6": {
       "frame": {
         "x": 28,
         "y": 176,
@@ -1368,7 +1392,7 @@
         "y": 0.5
       }
     },
-    "spikes_anim_f8": {
+    "spikes_anim_f7": {
       "frame": {
         "x": 252,
         "y": 4,
@@ -1392,7 +1416,7 @@
         "y": 0.5
       }
     },
-    "spikes_anim_f9": {
+    "spikes_anim_f8": {
       "frame": {
         "x": 210,
         "y": 28,
@@ -1416,7 +1440,7 @@
         "y": 0.5
       }
     },
-    "stair_nextlevel": {
+    "spikes_anim_f9": {
       "frame": {
         "x": 107,
         "y": 117,
@@ -1440,7 +1464,7 @@
         "y": 0.5
       }
     },
-    "empty": {
+    "stair_nextlevel": {
       "frame": {
         "x": 73,
         "y": 141,
@@ -1464,10 +1488,34 @@
         "y": 0.5
       }
     },
-    "long_wall": {
+    "empty": {
       "frame": {
         "x": 136,
         "y": 100,
+        "w": 16,
+        "h": 16
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 16
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 16
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "long_wall": {
+      "frame": {
+        "x": 161,
+        "y": 76,
         "w": 48,
         "h": 16
       },
@@ -1562,30 +1610,6 @@
     },
     "wall_arch_left": {
       "frame": {
-        "x": 64,
-        "y": 49,
-        "w": 16,
-        "h": 12
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 4,
-        "w": 16,
-        "h": 12
-      },
-      "sourceSize": {
-        "w": 16,
-        "h": 16
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "wall_arch_right": {
-      "frame": {
         "x": 88,
         "y": 70,
         "w": 16,
@@ -1608,10 +1632,34 @@
         "y": 0.5
       }
     },
-    "wall_bottom": {
+    "wall_arch_right": {
       "frame": {
         "x": 234,
         "y": 28,
+        "w": 16,
+        "h": 12
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 4,
+        "w": 16,
+        "h": 12
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 16
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "wall_bottom": {
+      "frame": {
+        "x": 64,
+        "y": 52,
         "w": 16,
         "h": 7
       },
@@ -1706,8 +1754,8 @@
     },
     "wall_side_left": {
       "frame": {
-        "x": 161,
-        "y": 76,
+        "x": 160,
+        "y": 100,
         "w": 16,
         "h": 16
       },
@@ -1729,30 +1777,6 @@
       }
     },
     "wall_side_right": {
-      "frame": {
-        "x": 185,
-        "y": 52,
-        "w": 16,
-        "h": 16
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 16,
-        "h": 16
-      },
-      "sourceSize": {
-        "w": 16,
-        "h": 16
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "wall_top_inner_left_2": {
       "frame": {
         "x": 131,
         "y": 124,
@@ -1776,10 +1800,34 @@
         "y": 0.5
       }
     },
+    "wall_top_inner_left_2": {
+      "frame": {
+        "x": 185,
+        "y": 52,
+        "w": 16,
+        "h": 16
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 16
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 16
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
     "wall_top_inner_right_2": {
       "frame": {
-        "x": 4,
-        "y": 305,
+        "x": 217,
+        "y": 52,
         "w": 16,
         "h": 16
       },
@@ -1874,8 +1922,8 @@
     },
     "spikes_anim_f1": {
       "frame": {
-        "x": 83,
-        "y": 117,
+        "x": 137,
+        "y": 76,
         "w": 16,
         "h": 16
       },
@@ -1898,8 +1946,8 @@
     },
     "spikes_anim_f2": {
       "frame": {
-        "x": 83,
-        "y": 117,
+        "x": 137,
+        "y": 76,
         "w": 16,
         "h": 16
       },
@@ -1922,8 +1970,8 @@
     },
     "spikes_anim_f4": {
       "frame": {
-        "x": 137,
-        "y": 76,
+        "x": 161,
+        "y": 52,
         "w": 16,
         "h": 16
       },
@@ -1952,7 +2000,7 @@
     "format": "RGBA8888",
     "size": {
       "w": 296,
-      "h": 325
+      "h": 301
     },
     "scale": 1
   }

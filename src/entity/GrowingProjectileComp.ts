@@ -9,6 +9,7 @@ import {E_EFlag} from "./Entity";
 import CircleCollider from "../physics/CircleCollider";
 import * as PIXI from "pixi.js";
 import BLEND_MODES = PIXI.BLEND_MODES;
+import C_Game from "../const/C_Game";
 
 export default class GrowingProjectileComp extends BaseComp
 {
@@ -48,8 +49,8 @@ export default class GrowingProjectileComp extends BaseComp
 
         const scale = 1 + this.lifetime/200;
 
-        this.anim.anim.sprite.scale.set(app.model.scale * scale);
-        this.collider.radius = app.model.scale * 3 * scale;
+        this.anim.anim.sprite.scale.set(C_Game.SCALE * scale);
+        this.collider.radius = C_Game.SCALE * 3 * scale;
 
         const collisions = this.physics.collider.collisions;
         if (this.cooldown <= 0)

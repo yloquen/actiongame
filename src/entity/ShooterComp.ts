@@ -10,6 +10,7 @@ import E_SpriteState from "../const/E_SpriteState";
 import SimpleProjectileComp from "./SimpleProjectileComp";
 import CircleCollider from "../physics/CircleCollider";
 import CharControlComp from "./CharControlComp";
+import C_Game from "../const/C_Game";
 
 
 export default class ShooterComp extends BaseComp
@@ -62,7 +63,7 @@ export default class ShooterComp extends BaseComp
                     collider:
                     {
                         type:CircleCollider,
-                        radius:app.model.scale*3,
+                        radius:C_Game.SCALE*3,
                         ratioOut:.25,
                         ratioIn:1
                     }
