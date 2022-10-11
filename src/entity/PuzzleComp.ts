@@ -10,14 +10,16 @@ import Tile from "../puzzle/Tile";
 import C_PointerEvt from "../const/C_PointerEvt";
 import gsap from "gsap";
 import {InteractionEvent} from "pixi.js";
+import PhysicsComp from "./PhysicsComp";
+import CircleCollider from "../physics/CircleCollider";
 
 export default class PuzzleComp extends BaseComp
 {
-    static flagRotations:any = {0:0, };
 
     private puzzle:Puzzle;
     private puzzleContainer:PIXI.Sprite;
     private tileContainer:PIXI.Sprite;
+    private collisions:CircleCollider[];
 
 
     constructor(e:Entity, data:any)
@@ -26,11 +28,14 @@ export default class PuzzleComp extends BaseComp
         this.puzzle = data.puzzle;
 
         this.puzzleContainer = new PIXI.Sprite();
+        this.puzzleContainer.x = (C_Game.TILE_HALF_SIZE + this.puzzle.x * C_Game.TILE_SIZE)  * C_Game.SCALE;
+        this.puzzleContainer.y = (C_Game.TILE_HALF_SIZE + this.puzzle.y * C_Game.TILE_SIZE)  * C_Game.SCALE;
         app.viewManager.addChild(E_ViewLayer.TERRAIN_UNDER_2, this.puzzleContainer);
 
         const tiles = this.puzzle.tiles;
         const offsetX = -Math.floor(tiles.length * .5);
         const offsetY = -Math.floor(tiles[0].length * .5);
+
         for (let x = 0; x < tiles.length; x++)
         {
             for (let y = 0; y < tiles[x].length; y++)
@@ -48,9 +53,9 @@ export default class PuzzleComp extends BaseComp
                 {
                     e.stopPropagation();
                     const tc = e.currentTarget;
-                    gsap.to(tc, {duration:.25, rotation:tc.rotation + Math.PI * .5});
-                    tile.onActivate();
-                }, this);
+                    tile.onActivate(tc);
+                },
+                    this);
 
                 for (let tIdx = 0; tIdx < tile.textureIds.length; tIdx++)
                 {
@@ -67,7 +72,6 @@ export default class PuzzleComp extends BaseComp
                     tc.addChild(s);
 
                     const flags = tile.textureFlags[tIdx];
-                    console.log(flags);
 
                     s.rotation = -Tile.ROTATION_FLAGS.indexOf(flags) * Math.PI * .5;
                 }
@@ -78,13 +82,19 @@ export default class PuzzleComp extends BaseComp
 
     init():void
     {
+        const physics = this.entity.getComponent(PhysicsComp)!;
+        debugger;
+        // .collider.collisions;
         this.addUpdateCallback(E_UpdateStep.POST_INPUT);
     }
 
 
     update(delta:number):void
     {
-
+        if (this.collisions.length > 0)
+        {
+            console.log(1);
+        }
     }
 
 

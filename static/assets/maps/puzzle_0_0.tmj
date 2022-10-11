@@ -1,0 +1,97 @@
+{ "compressionlevel":-1,
+ "height":3,
+ "infinite":false,
+ "layers":[
+        {
+         "data":[45, 45, 45,
+            45, 45, 45,
+            45, 45, 45],
+         "height":3,
+         "id":1,
+         "name":"bg",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":3,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[0, 46, 0,
+            0, 0, 0,
+            46, 0, 0],
+         "height":3,
+         "id":2,
+         "name":"dot0",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":3,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[0, 0, 0,
+            1610612782, 1610612782, 0,
+            0, 0, 0],
+         "height":3,
+         "id":3,
+         "name":"dot1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":3,
+         "x":0,
+         "y":0
+        },
+    
+        {
+         "data":[0, 0, 0,
+            0, 3221225518, 0,
+            0, 0, 0],
+         "height":3,
+         "id":4,
+         "name":"dot2",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":3,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[0, 0, 2684354606,
+            0, 0, 0,
+            0, 0, 0],
+         "height":3,
+         "id":5,
+         "name":"dot3",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":3,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":6,
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "properties":[
+        {
+         "name":"type",
+         "type":"string",
+         "value":"line_dot"
+        }],
+ "renderorder":"right-down",
+ "tiledversion":"1.8.6",
+ "tileheight":16,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "source":"tiles.tsj"
+        }],
+ "tilewidth":16,
+ "type":"map",
+ "version":"1.8",
+ "width":3
+}

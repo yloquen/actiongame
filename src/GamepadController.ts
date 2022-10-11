@@ -11,10 +11,9 @@ export default class GamepadController
     public buttonsState:boolean[];
     public buttonChanges:number[];
     public velocity:Point;
+    public aimVector:Point;
 
     private deadZone:number = .5;
-    private aimVector:Point;
-
 
 
     init():void

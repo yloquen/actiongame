@@ -19,6 +19,7 @@ export default class CircleCollider
     public ratioIn:number;
 
     public isStatic:boolean;
+    public hasResponse:boolean;
 
     public radius:number;
     public mass:number;
@@ -42,6 +43,8 @@ export default class CircleCollider
         this.ratioIn = data.ratioIn;
 
         this.isStatic = Boolean(data.isStatic);
+
+        this.hasResponse = data.hasResponse === undefined;
 
         this.collisions = [];
 

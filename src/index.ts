@@ -14,9 +14,24 @@ import {gsap} from "gsap";
 import Pool from "./Pool";
 
 
+type App =
+{
+    pixi:PIXI.Application,
+    model:Model,
+    assets:Assets,
+    game:Game,
+    viewManager:ViewManager,
+    enemyManager:EnemyManager,
+    physics:PhysicsEngine,
+    sound:SoundController,
+    gamepadController:GamepadController,
+    mapGenerator:MapGenerator,
+    camera:CameraController,
+    pool:Pool
+};
 
 
-export const app:any =
+export const app:App =
 {
     pixi:new PIXI.Application({
         width: window.innerWidth,
@@ -35,6 +50,7 @@ export const app:any =
     camera:new CameraController(),
     pool:new Pool()
 };
+
 
 document.body.appendChild(app.pixi.view);
 
@@ -55,7 +71,7 @@ app.pixi.loader
     .add("tilemap1", "assets/maps/map1.tmj?v=" + C_Game.ASSET_VER)
     .add("tilemap2", "assets/maps/map2.tmj?v=" + C_Game.ASSET_VER)
     .add("tileset", "assets/maps/tiles.tsj?v=" + C_Game.ASSET_VER)
-    .add("puzzle_1_1", "assets/maps/puzzle_1_1.tmj?v=" + C_Game.ASSET_VER)
+    .add("puzzle_0_0", "assets/maps/puzzle_0_0.tmj?v=" + C_Game.ASSET_VER)
     .load(start);
 
 

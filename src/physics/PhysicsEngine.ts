@@ -296,6 +296,11 @@ export default class PhysicsEngine
 
     applyCollisionResult(c1:CircleCollider, c2:CircleCollider, moveVec:Point):void
     {
+        if (!(c1.hasResponse && c2.hasResponse))
+        {
+            return;
+        }
+
         this.tempPts[0].copyFrom(moveVec);
         this.tempPts[1].copyFrom(moveVec);
 

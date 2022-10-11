@@ -8,7 +8,7 @@
  "margin":0,
  "name":"tiles",
  "spacing":0,
- "tilecount":45,
+ "tilecount":46,
  "tiledversion":"1.8.6",
  "tileheight":16,
  "tiles":[
@@ -279,6 +279,12 @@
         {
          "id":45,
          "image":"..\/..\/..\/design\/assets\/puzzle\/dot_1.png",
+         "imageheight":16,
+         "imagewidth":16
+        }, 
+        {
+         "id":46,
+         "image":"..\/..\/..\/design\/assets\/knight\/knight_idle_anim_f0.png",
          "imageheight":16,
          "imagewidth":16
         }],

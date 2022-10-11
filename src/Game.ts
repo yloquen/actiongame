@@ -43,59 +43,8 @@ export default class Game
 
     init():void
     {
-        let e = new Entity({
-            components:
-            [
-                {
-                    compType:PhysicsComp,
-                    pos:{x:0, y:0},
-                    collider:
-                    {
-                        type: CircleCollider,
-                        radius:C_Game.SCALE*5,
-                        ratioOut:1,
-                        ratioIn:1
-                    }
-                },
-                {
-                    compType:AnimSpriteComp,
-                    animData:
-                    [
-                        {
-                            stateName:E_SpriteState.IDLE,
-                            numFrames:6,
-                            updateTime:100,
-                            texturePrefix:"knight_idle_anim_f",
-                            frame:0
-                        },
-                        {
-                            stateName:E_SpriteState.WALK,
-                            numFrames:6,
-                            updateTime:100,
-                            texturePrefix:"knight_run_anim_f",
-                            frame:0
-                        }
-                    ]
-                },
-                {
-                    compType:CharControlComp
-                },
-                {
-                    compType:MouseControlComp
-                },
-                {
-                    compType:ShooterComp
-                },
-                {
-                    compType:BeamComp
-                },
-                {
-                    compType:GrowingProjectileWeaponComp
-                }
-            ]
-        });
 
-        this.character = e;
+        //this.character = e;
 
         app.pixi.ticker.add(this.update.bind(this));
 

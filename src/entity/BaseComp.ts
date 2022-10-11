@@ -21,7 +21,7 @@ export default class
 
     init():void
     {
-        let a=1
+
     }
 
 

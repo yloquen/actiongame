@@ -1,18 +1,23 @@
 import {app} from "./index";
 import {E_ViewLayer} from "./ViewManager";
-import Entity from "./entity/Entity";
+import Entity, {E_EFlag} from "./entity/Entity";
 import PhysicsComp from "./entity/PhysicsComp";
-
-import { E_EFlag } from "./entity/Entity";
 import PolyCollider from "./physics/PolyCollider";
 import SpriteComp from "./entity/SpriteComp";
 import CircleCollider from "./physics/CircleCollider";
-import RectCollider from "./physics/RectCollider";
 import C_LayerObjType from "./const/C_LayerObjType";
 import Util from "./util/Util";
 import Puzzle from "./puzzle/Puzzle";
-import PuzzleComp from "./entity/PuzzleComp";
 import C_Game from "./const/C_Game";
+import AnimSpriteComp from "./entity/AnimSpriteComp";
+import E_SpriteState from "./const/E_SpriteState";
+import CharControlComp from "./entity/CharControlComp";
+import MouseControlComp from "./entity/MouseControlComp";
+import ShooterComp from "./entity/ShooterComp";
+import BeamComp from "./entity/BeamComp";
+import GrowingProjectileWeaponComp from "./entity/GrowingProjectileWeaponComp";
+import PuzzleGroup from "./puzzle/PuzzleGroup";
+import PuzzleComp from "./entity/PuzzleComp";
 
 
 export default class MapGenerator
@@ -21,13 +26,14 @@ export default class MapGenerator
 
     private layers:number[][][];
 
-    private readonly puzzles:Puzzle[][];
+    private readonly puzzleGroups:PuzzleGroup[];
 
 
     constructor()
     {
-        this.puzzles = [];
+        this.puzzleGroups = [];
     }
+
 
     init():void
     {
@@ -43,6 +49,7 @@ export default class MapGenerator
         });
 
         this.layers = [];
+
         mapData.layers.forEach((layerData:any, index:number) =>
         {
             this.layers[index] = [];
@@ -66,7 +73,6 @@ export default class MapGenerator
             if (layerData.objects)
             {
 
-
                 for (let objIdx=0; objIdx<layerData.objects.length; objIdx++)
                 {
                     const object = layerData.objects[objIdx];
@@ -77,29 +83,30 @@ export default class MapGenerator
 
                         case C_LayerObjType.PUZZLE:
                         {
-                            const data = {};
+                            const groupId = Util.getProp(object, "group_id");
                             const id = Util.getProp(object, "id");
+                            const x = Util.getProp(object, "x");
+                            const y = Util.getProp(object, "y");
 
-                            if (!this.puzzles[id])
+                            if (!this.puzzleGroups[groupId])
                             {
-                                this.puzzles[id] = [];
+                                this.puzzleGroups[groupId] = new PuzzleGroup();
                             }
 
-                            const subId = Util.getProp(object, "sub_id");
-                            {
-                                const name = `puzzle_${id}_${subId}`;
-                                const data = JSON.parse(app.assets.resources[name].data);
-                                const puzzle = new Puzzle(data);
-                                this.puzzles[id][subId] = puzzle;
-                                new Entity({components:[{compType:PuzzleComp, puzzle:puzzle}]});
-                            }
+                            const name = `puzzle_${groupId}_${id}`;
+                            const data = JSON.parse(app.assets.resources[name].data);
+                            data.x = x;
+                            data.y = y;
+
+                            const puzzleGroup = this.puzzleGroups[groupId];
+                            puzzleGroup.puzzles[id] = new Puzzle(data);
 
                             break;
                         }
                     }
                 }
             }
-        });
+        }, this);
 
         this.drawMap();
     }
@@ -138,6 +145,7 @@ export default class MapGenerator
 
     createTileEntities(tileId:number, xPos:number, yPos:number, layerId:E_ViewLayer):void
     {
+
         /*
         if (tileId !== 0)
         {
@@ -169,15 +177,16 @@ export default class MapGenerator
             });
         }
 
+        const w = C_Game.SCALE * 18;
+        const h = C_Game.SCALE * 18;
+        const hw = w * .5;
+        const hh = h * .5;
+
         switch (tileId)
         {
 
             case 40:
             {
-                const w = C_Game.SCALE * 18;
-                const h = C_Game.SCALE * 18;
-                const hw = w * .5;
-                const hh = h * .5;
                 entityData.components.push({
                     compType:PhysicsComp,
                     pos:{x:xPos, y:yPos},
@@ -207,12 +216,98 @@ export default class MapGenerator
                 break;
             }
 
-/*            case 44:
+            case 44:
             {
+                for (let pgIdx = 0; pgIdx < this.puzzleGroups.length; pgIdx++)
+                {
+                    const puzzleGroup = this.puzzleGroups[pgIdx];
+                    for (let pIdx = 0; pIdx < puzzleGroup.puzzles.length; pIdx++)
+                    {
+                        const p = puzzleGroup.puzzles[pgIdx];
+                        if (p.x === xPos && p.y === yPos)
+                        {
+                            entityData.components.push({compType:PuzzleComp, puzzle:p});
+                        }
+                    }
+                }
 
+                entityData.components.push({
+                    compType:PhysicsComp,
+                    pos:{x:xPos, y:yPos},
+                    collider:
+                        {
+                            type: PolyCollider,
+                            points:[
+                                {x: -hw, y: -hh},
+                                {x: hw, y: -hh},
+                                {x: hw, y: hh},
+                                {x: -hw, y: hh}
+                            ],
+                            ratioOut:0,
+                            ratioIn:0,
+                            hasResponse:false,
+                            mass:1//Number.MAX_VALUE
+                        }
+                });
 
                 break;
-            }*/
+            }
+
+            case 47:
+            {
+                // const pc = app.game.character.getComponent(PhysicsComp)!;
+                // pc.position.set(xPos, yPos);
+                entityData.components.length = 0;
+                entityData.components.push(
+                    {
+                        compType:PhysicsComp,
+                        pos:{x:xPos, y:yPos},
+                        collider:
+                            {
+                                type: CircleCollider,
+                                radius:C_Game.SCALE*5,
+                                ratioOut:1,
+                                ratioIn:1
+                            }
+                    },
+                    {
+                        compType:AnimSpriteComp,
+                        animData:
+                            [
+                                {
+                                    stateName:E_SpriteState.IDLE,
+                                    numFrames:6,
+                                    updateTime:100,
+                                    texturePrefix:"knight_idle_anim_f",
+                                    frame:0
+                                },
+                                {
+                                    stateName:E_SpriteState.WALK,
+                                    numFrames:6,
+                                    updateTime:100,
+                                    texturePrefix:"knight_run_anim_f",
+                                    frame:0
+                                }
+                            ]
+                    },
+                    {
+                        compType:CharControlComp
+                    },
+                    {
+                        compType:MouseControlComp
+                    },
+                    {
+                        compType:ShooterComp
+                    },
+                    {
+                        compType:BeamComp
+                    },
+                    {
+                        compType:GrowingProjectileWeaponComp
+                    });
+
+                break;
+            }
 
             default:
             {
@@ -224,7 +319,12 @@ export default class MapGenerator
             }
         }
 
-        new Entity(entityData);
+        const e = new Entity(entityData);
+
+        if (tileId === 47)
+        {
+            app.game.character = e;
+        }
 
     }
 

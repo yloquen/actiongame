@@ -23,7 +23,7 @@ export default class CameraController
     init()
     {
         this.updateData = app.game.addUpdateCallback(this.update.bind(this), E_UpdateStep.POST_INPUT);
-        this.charPosition = app.game.character.getComponent(PhysicsComp).position;
+        this.charPosition = app.game.character.getComponent(PhysicsComp)!.position;
         this.mainContainer = app.viewManager.mainContainer;
 
         window.addEventListener("resize", this.onResize.bind(this));

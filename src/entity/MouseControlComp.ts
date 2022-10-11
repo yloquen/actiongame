@@ -24,6 +24,7 @@ export default class MouseControlComp extends BaseComp
         this.physics = this.entity.getComponent(PhysicsComp)!;
         this.tempPt = new PIXI.Point();
         this.targetPos = new Point();
+        this.targetPos.copyFrom(this.physics.position);
         this.tempPt2 = new Point();
         app.pixi.stage.addListener(C_PointerEvt.DOWN, this.handlePointerDown.bind(this));
         app.pixi.stage.addListener(C_PointerEvt.UP, this.handlePointerUp.bind(this));
